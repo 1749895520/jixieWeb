@@ -1,0 +1,93 @@
+.container .cloud {
+    top: 10px;
+    width: 100px;
+    height: 100px;
+    background: #ffffff;
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: 40px -28px 0 0 #ffffffCC,
+    33px 28px 0 0 #ffffff,
+    90px -36px 0 0 #ffffffAA,
+    95px 25px 0 0 #ffffff,
+    150px 0px 0 0 #ffffff;
+}
+
+.cloud-pos-1 {
+    transform: translate(100px, 120px);
+    animation: cloud-pos-1 3s linear infinite alternate;
+}
+
+@keyframes cloud-pos-1 {
+    100% {
+        transform: translate(150px, 120px);
+    }
+}
+
+.cloud-pos-2 {
+    transform: translate(150px, 120px);
+    animation: cloud-pos-2 5s linear infinite alternate;
+    left: 800px;
+}
+
+@keyframes cloud-pos-2 {
+    100% {
+        transform: translate(120px, 120px);
+    }
+}
+
+.cloud-pos-3 {
+    transform: translate(150px, 120px);
+    animation: cloud-pos-3 5s linear infinite alternate;
+    left: 1200px;
+}
+
+@keyframes cloud-pos-3 {
+    100% {
+        transform: translate(120px, 120px);
+    }
+}
+
+.cloud-1 {
+    left: -170px;
+    top: -80px;
+}
+
+.cloud-2 {
+    left: -180px;
+    top: -20px;
+}
+
+.cloud-3 {
+    left: -100px;
+}
+
+.cloud-4 {
+    left: -50px;
+}
+
+.cloud-5 {
+    left: -10px;
+    top: -10px;
+}
+
+.cloud-6 {
+    left: 100px;
+}
+
+.cloud-7 {
+    left: 220px;
+}
+
+.cloud-8 {
+    left: 300px;
+    top: -10px;
+}
+
+.cloud-9 {
+    left: -170px;
+}
+
+.cloud-10 {
+    left: -120px;
+    top: -50px;
+}
