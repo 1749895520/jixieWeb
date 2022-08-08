@@ -45,11 +45,8 @@ export default {
   },
   methods: {
     toCenter() {
-      if (this.$store.state.activePath !== '个人信息') {
-        this.$router.push('/center/home')
-      } else {
-        this.$message.error('当前已在个人信息界面 _(¦3」∠)_')
-      }
+      let routerGoto = this.$router.resolve('/center/home')
+      window.open(routerGoto.href, '_blank');
     },
     logout() {
       localStorage.removeItem('user')

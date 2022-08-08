@@ -103,7 +103,6 @@ export default {
   created() {
     this.getUser()
     this.getData()
-    console.log('manage')
   },
   components: {
     Aside,
@@ -153,10 +152,10 @@ export default {
       }
     },
     getUser() {
-      let username = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).username : ""
-      if (username) {
+      let id = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).id : ""
+      if (id) {
         this.$store.state.asidePath = localStorage.getItem("menus") ? JSON.parse(localStorage.getItem("menus")) : ""
-        this.request.get("/user/username/" + username).then(res => {
+        this.request.get("/user/" + id).then(res => {
           this.$store.state.user = res.data
         })
       }

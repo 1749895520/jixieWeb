@@ -1,7 +1,7 @@
 <template>
   <div type="flex">
     <el-card class="box-card box-opacity">
-      <div class="search-input " :class="{'box-search':this.$store.state.windowOrPhone}">
+      <div :class="{'box-search':this.$store.state.windowOrPhone}">
         <div
             :class="{'box-window-search':this.$store.state.windowOrPhone,'box-phone-search':!this.$store.state.windowOrPhone}">
           <el-input suffix-icon="el-icon-search" size="small" placeholder="请输入要查找的用户名"
@@ -346,8 +346,4 @@ export default {
 
 <style scoped>
 
-.search-input >>> .el-input__inner {
-  background-color: #f0f9ff;
-  border-color: #c7e5f9;
-}
 </style>

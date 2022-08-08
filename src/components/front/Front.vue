@@ -105,6 +105,7 @@
             class="shape-fill"></path>
       </svg>
     </div>
+    <el-backtop/>
   </div>
 </template>
 
@@ -181,10 +182,10 @@ export default {
       this.list = this.$store.state.strDate
     },
     getUser() {
-      let username = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).username : ""
-      if (username) {
+      let id = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).id : ""
+      if (id) {
         this.$store.state.asidePath = localStorage.getItem("menus") ? JSON.parse(localStorage.getItem("menus")) : ""
-        this.request.get("/user/username/" + username).then(res => {
+        this.request.get("/user/" + id).then(res => {
           this.$store.state.user = res.data
         })
       }
@@ -266,7 +267,7 @@ export default {
   position: relative;
   z-index: 2;
   min-height: 100vh;
-  background-color: #e0f2fe;
+  background-color: #fff;
   margin: 200px auto auto;
   border: 1px solid #fff;
 }

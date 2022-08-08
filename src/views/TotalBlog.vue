@@ -1,7 +1,7 @@
 <template>
   <div type="flex">
     <el-card class="box-card box-opacity">
-      <div class="search-input " :class="{'box-search':this.$store.state.windowOrPhone}">
+      <div style="margin-bottom: 10px" :class="{'box-search':this.$store.state.windowOrPhone}">
         <div
             :class="{'box-window-search':this.$store.state.windowOrPhone,'box-phone-search':!this.$store.state.windowOrPhone}">
           <el-input suffix-icon="el-icon-search" size="small" placeholder="请输入要查找的博客标题"
@@ -10,14 +10,12 @@
         <div
             :class="{'box-window-search':this.$store.state.windowOrPhone,'box-phone-search':!this.$store.state.windowOrPhone}"
             :style="{small:this.$store.state.windowOrPhone,big:!this.$store.state.windowOrPhone}">
-          <el-button class="" type="primary" @click="load">搜索</el-button>
+          <el-button type="primary" @click="load">搜索</el-button>
           <el-button type="primary" @click="reset">重置</el-button>
+          <el-button type="danger" size="mini" @click="delAllDialogVisible = true">批量删除<i
+              class="el-icon-delete"></i>
+          </el-button>
         </div>
-      </div>
-      <div class="box-user-operation">
-        <el-button type="primary" @click="handleAdd">新增 <i class="el-icon-circle-plus-outline ml-5"></i></el-button>
-        <el-button type="danger" @click="delAllDialogVisible = true">批量删除<i class="el-icon-delete ml-5"></i>
-        </el-button>
       </div>
       <el-table :data="tableData"
                 highlight-current-row
@@ -45,12 +43,11 @@
         </el-table-column>
         <el-table-column prop="time" label="发布时间" min-width="100px">
         </el-table-column>
-        <el-table-column label="操作" width="130px" fixed="right">
+        <el-table-column label="操作" width="200px" fixed="right">
           <template slot-scope="scope">
             <div>
               <el-button size="mini" class="el-button-small" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" class="el-button-small" @click="isDel(scope.row.id)">删除
-              </el-button>
+              <el-button size="mini" type="danger" class="el-button-small" @click="isDel(scope.row.id)">删除</el-button>
             </div>
           </template>
         </el-table-column>
@@ -81,6 +78,7 @@
 
     <!--编辑用户信息弹窗-->
     <el-dialog :modal-append-to-body="false"
+               :close-on-click-modal="false"
                title="博客信息" class="box-card" :visible.sync="dialogFormVisible"
                :width="this.$store.state.windowOrPhone?'80%':'90%'">
       <el-form
@@ -89,10 +87,17 @@
           label-width="60px"
       >
         <el-form-item label="标题">
-          <el-input style="width: 80%" :disabled="isDisable" v-model="form.name" autocomplete="off"></el-input>
+          <el-input maxlength="50" style="width: 80%" v-model="form.name" autocomplete="off"></el-input>
+          <span style="margin: 0 10px 0 10px">是否置顶</span>
+          <el-switch
+              v-model="form.top"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+          </el-switch>
         </el-form-item>
         <el-form-item label="内容">
-          <mavon-editor class="box-opacity" ref="md" v-model="form.content" :ishljs="true" @imgAdd="imgAdd"/>
+          <mavon-editor style="max-height: 40vh" class="box-opacity" ref="md" v-model="form.content" :ishljs="true"
+                        @imgAdd="imgAdd"/>
         </el-form-item>
       </el-form>
       <el-row :gutter="10">
@@ -107,7 +112,7 @@
 
     <!--    文章内容  -->
     <el-dialog :modal-append-to-body="false"
-               title="博客内容" class="box-card" :visible.sync="dialogViewVisible"
+               title="博客预览" class="box-card" :visible.sync="dialogViewVisible"
                :width="this.$store.state.windowOrPhone?'80%':'90%'">
       <div>
         <mavon-editor
@@ -118,6 +123,7 @@
             :toolbars-flag="false"
             :scroll-style="true"
             :ishljs="true"
+            style="min-height: 60vh;max-height: 60vh"
         />
       </div>
     </el-dialog>
@@ -129,7 +135,7 @@
         title="提示"
         :visible.sync="delDialogVisible"
         :width="this.$store.state.windowOrPhone?'30%':'80%'">
-      <span>确认删除当前用户信息？</span>
+      <span>确认删除当前博客？</span>
       <span slot="footer" class="dialog-footer">
     <el-button @click="delDialogVisible = false">我再想想</el-button>
     <el-button type="primary" @click="this.doDel">确 定</el-button>
@@ -177,7 +183,6 @@ export default {
       delId: 0,
       multipleSelection: [],
       form: {},
-      isDisable: false,
       viewContent: '',
     }
   },
@@ -226,10 +231,8 @@ export default {
     },
     handleEdit(row) {
       this.form = row
-      this.isDisable = false
       this.dialogFormVisible = true
       this.load()
-      this.isDisable = true
     },
     isDel(id) {
       this.delId = id
@@ -268,10 +271,6 @@ export default {
       this.time = ''
       this.userId = 0
       this.load()
-    },
-    handleAdd() {
-      this.dialogFormVisible = true
-      this.form = {}
     },
     handleSizeChange(pageSize) {
       this.pageSize = pageSize
@@ -316,8 +315,4 @@ export default {
 
 <style scoped>
 
-.search-input >>> .el-input__inner {
-  background-color: #f0f9ff;
-  border-color: #c7e5f9;
-}
 </style>

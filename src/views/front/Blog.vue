@@ -6,9 +6,22 @@
       <el-col :span="6" v-if="isfixTab && this.$store.state.windowSize==='lg'"
               style="border: 1px solid transparent"></el-col>
       <el-col :xs="24" :sm="10" :md="10" :lg="6">
-        <el-card
-            :class="{ 'fixed front-blog-person':isfixTab && this.$store.state.windowSize==='lg'}">
-
+        <el-card style="margin-bottom: 10px"
+                 :class="{ 'fixed front-blog-person':isfixTab && this.$store.state.windowSize==='lg'}">
+          <div class="front-name">
+            <span class="front-name-title">置顶博客</span>
+          </div>
+          <div v-for="item in tableData" :key="item.id">
+            <div v-if="item.top">
+              <span class="front-blog-top-box"/>
+              <el-tooltip class="item" effect="dark" :content="item.name" placement="top-start">
+              <span class="front-blog-top-group" @click="goto(item.id)">
+                 {{ getTitle(item.name) }}
+              </span>
+              </el-tooltip>
+              <span style="color: #aaa;position: relative;float: right">{{ item.time.substring(0, 10) }}</span>
+            </div>
+          </div>
         </el-card>
       </el-col>
       <el-col :xs="24" :sm="14" :md="14" :lg="18">
@@ -35,7 +48,6 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="pageNum"
-                :page-sizes="[5,10]"
                 :page-size="pageSize"
                 layout="total, prev, pager, next"
                 :total="total"
@@ -67,7 +79,7 @@ export default {
       tableData: [],
       total: 0,
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 7,
       content: '',
       user: '',
       time: '',
@@ -128,6 +140,13 @@ export default {
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
       let offsetTop = document.querySelector('#main').offsetTop
       scrollTop > offsetTop + 120 ? this.isfixTab = true : this.isfixTab = false
+    },
+    getTitle(name) {
+      if (name.length > 5) {
+        return name.substring(0, 5) + "..."
+      } else {
+        return name
+      }
     }
   }
 }
@@ -135,9 +154,24 @@ export default {
 
 <style scoped>
 
-.search-input >>> .el-input__inner {
-  background-color: #f0f9ff;
-  border-color: #c7e5f9;
+/*  置顶博客框 */
+.front-blog-top-box {
+  width: 6px;
+  height: 6px;
+  background-color: #aaa;
+  position: relative;
+  top: 14px;
+  margin-left: 10px;
+  display: flex;
+}
+
+.front-blog-top-group {
+  margin-left: 30px;
+  cursor: pointer;
+}
+
+.front-blog-top-group:hover {
+  color: #006ED7;
 }
 
 /*  博客框 */

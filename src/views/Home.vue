@@ -157,6 +157,7 @@ export default {
           passNum: this.passNum
         }
       }).then(res => {
+        // console.log(res.data)
         this.tableData = res.data.records
         this.total = res.data.total
       })

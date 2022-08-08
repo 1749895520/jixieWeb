@@ -154,7 +154,7 @@ export default {
               this.$message.success('登陆成功 ヾ(✿ﾟ▽ﾟ)ノ')
               this.$router.push(this.$store.state.homePath)
               if (this.$route.path === '/login') {
-                this.$router.push(this.$store.state.homePath)
+                window.history.back();     //返回上一页并强行刷新
               }
               //  动态设置当前用户的路由
               setRoutes()

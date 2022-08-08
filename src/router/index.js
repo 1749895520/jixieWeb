@@ -144,6 +144,7 @@ router.beforeEach((to, from, next) => {
         document.title = to.name + '-AHPU 计算机协会'
     }
     next()
+
 })
 
 export default router

@@ -56,6 +56,7 @@
               :toolbars-flag="false"
               :scroll-style="true"
               :ishljs="true"
+              ref="blog"
           />
         </el-card>
         <el-card class="front-blog-comment-box">
@@ -118,12 +119,64 @@
                 <el-image :src="item.avatarUrl" class="front-blog-comment-avatar"></el-image>
               </div>
             </div>
+            <!--            操作    -->
             <div class="front-blog-comment-reply-box">
-              <el-button type="text" class="front-blog-comment-reply" @click="handelReply">回复</el-button>
+              <el-button type="text" class="front-blog-comment-reply" @click="handelReply(item.id)">回复</el-button>
               <el-button v-if="item.userId===user.id" type="text" class="front-blog-comment-delete"
                          @click="isDel(item.id)">删除
               </el-button>
             </div>
+            <!--            评论回复      -->
+            <el-collapse class="front-blog-collapse" v-model="activeName" accordion v-if="item.children.length">
+              <el-collapse-item title="展开回复" :name="item.id">
+                <div v-for="subItem in item.children" :key="subItem.id">
+                  <div style="flex: 1;font-size: 14px;padding: 5px 0;line-height: 25px;border-bottom: 1px solid #aaa">
+                    <div style="display: flex">
+                      <el-image :src="subItem.avatarUrl" style="width: 40px;height: 40px;border-radius: 50%"></el-image>
+                      <div style="display: flex;flex-direction: column;margin-left: 10px;max-width: 80%">
+                        <div style="color: gray">{{ subItem.nickname }} {{ subItem.time }}</div>
+                        <div class="front-blog-comment-content">{{ subItem.content }}</div>
+                      </div>
+                    </div>
+                    <!--            操作    -->
+                    <div style="display: flex;justify-content: right">
+                      <el-button type="text" class="front-blog-comment-reply" @click="handelReply(subItem.id)">回复
+                      </el-button>
+                      <el-button v-if="subItem.userId===user.id" type="text"
+                                 class="front-blog-comment-delete"
+                                 @click="isDel(subItem.id)">删除
+                      </el-button>
+                    </div>
+                    <div v-for="sonItem in subItem.children" :key="sonItem.id">
+                      <div
+                          style="flex: 1;font-size: 14px;padding: 5px 0;line-height: 25px">
+                        <div style="display: flex;margin-top: -10px;margin-left: 20px">
+                          <el-image :src="sonItem.avatarUrl"
+                                    style="width: 30px;height: 30px;border-radius: 50%;margin-left: 20px"></el-image>
+                          <div style="display: flex;flex-direction: column;margin-left: 10px;max-width: 80%">
+                            <div style="color: gray">
+                              {{ sonItem.nickname }}
+                              <span style="font-weight: bold;color: #000">回复</span>
+                              {{ getReplyName(sonItem.replyId, sonItem) }} {{ sonItem.time }}
+                            </div>
+                            <div class="front-blog-comment-content">{{ sonItem.content }}</div>
+                          </div>
+                        </div>
+                        <!--            操作    -->
+                        <div style="display: flex;justify-content: right">
+                          <el-button type="text" class="front-blog-comment-reply" @click="handelReply(subItem.id)">回复
+                          </el-button>
+                          <el-button v-if="sonItem.userId===user.id" type="text"
+                                     class="front-blog-comment-delete"
+                                     @click="isDel(sonItem.id)">删除
+                          </el-button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
           </div>
         </el-card>
       </el-col>
@@ -190,6 +243,8 @@ export default {
       delId: 0,
       delDialogVisible: false,
       dialogFormVisible: false,
+      activeName: '',
+      replyName: '',
     }
   },
   created() {
@@ -230,8 +285,8 @@ export default {
       let offsetTop = document.querySelector('#main').offsetTop
       scrollTop > offsetTop + 120 ? this.isfixTab = true : this.isfixTab = false
     },
-    handelReply() {
-      this.commentForm = {}
+    handelReply(id) {
+      this.commentForm = {pid: id}
       this.dialogFormVisible = true
     },
     save() {
@@ -239,17 +294,20 @@ export default {
         this.$message.warning('请登录后再操作[○･｀Д´･ ○]')
       }
       this.commentForm.articleId = this.articleId
-      if (this.commentForm)
-        this.request.post("comment/", this.commentForm).then(res => {
-          if (res.data) {
-            this.$message.success("评论成功(*❦ω❦)")
-            this.commentForm = {}
-            this.loadComment()
-          } else {
-            this.$message.error("评论失败o(╥﹏╥)o")
-          }
-          this.load()
-        })
+      if (this.commentForm.contentReply) {
+        this.commentForm.content = this.commentForm.contentReply
+      }
+      this.request.post("comment/", this.commentForm).then(res => {
+        if (res.data) {
+          this.$message.success("评论成功(*❦ω❦)")
+          this.commentForm = {}
+          this.loadComment()
+        } else {
+          this.$message.error("评论失败o(╥﹏╥)o")
+        }
+        this.dialogFormVisible = false
+        this.load()
+      })
     },
     isDel(id) {
       this.delId = id
@@ -267,6 +325,12 @@ export default {
         this.loadComment()
       })
     },
+    getReplyName(replyId, item) {
+      this.request.get('user/' + replyId).then(res => {
+        item.replyName = res.data.nickname
+      })
+      return item.replyName
+    }
   }
 }
 </script>
@@ -409,13 +473,15 @@ export default {
 }
 
 .front-blog-comment-avatar-box {
-  width: 100px;
+  width: 50px;
+  margin-left: 20px;
   text-align: center;
 }
 
 .front-blog-comment-avatar-box-my {
-  width: 100px;
+  width: 50px;
   text-align: center;
+  margin-right: 20px;
   justify-content: right;
 }
 
@@ -431,12 +497,16 @@ export default {
 
 .front-blog-comment-nickname {
   display: block;
-  font-weight: bold;
+  color: gray;
+  font-size: 14px;
+  margin-left: 10px;
 }
 
 .front-blog-comment-nickname-my {
   display: flex;
-  font-weight: bold;
+  color: gray;
+  margin-right: 10px;
+  font-size: 14px;
   justify-content: right;
 }
 
@@ -459,6 +529,35 @@ export default {
 
 .front-blog-comment-delete {
   color: red;
+}
+
+.front-blog-collapse {
+  border-top: 1px solid transparent;
+}
+
+.front-blog-collapse >>> .el-collapse-item__arrow {
+  width: 10px;
+  margin: 0 10px 0 5px;
+}
+
+.front-blog-collapse >>> .el-collapse-item__header {
+  background-color: #fff;
+  font-size: 14px;
+  font-weight: normal;
+  cursor: pointer;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.front-blog-collapse >>> .el-collapse-item__content {
+  background-color: #f0f0f0;
+  border: 1px solid #f0f0f0;
+  padding: 10px 10px;
+}
+
+.front-blog-collapse >>> .el-collapse-item__wrap {
+  border-bottom: 1px solid transparent;
 }
 
 </style>

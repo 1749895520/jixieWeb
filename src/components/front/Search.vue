@@ -3,7 +3,7 @@
     <!--    博客搜索栏   -->
     <div
         v-if="$store.state.frontPath.split('?')[0]==='/front/blog'||$store.state.frontPath.split('?')[0]==='/front/blogDetail'"
-        class="search-input front-search">
+        class="front-search">
       <div>
         <el-input
             suffix-icon="el-icon-search"
@@ -14,6 +14,9 @@
       </div>
       <div>
         <el-button class="front-search-button" type="primary" @click="load">搜索</el-button>
+      </div>
+      <div style="margin-left: 50px">
+        <el-button class="button-publish" type="primary" @click="gotoPublish()">发布博客</el-button>
       </div>
     </div>
   </div>
@@ -33,7 +36,15 @@ export default {
         this.$router.push('/front/blog')
       }
       this.$emit('load')
-    }
+    },
+    gotoPublish() {
+      if (localStorage.getItem('user')) {
+        let routerGoto = this.$router.resolve('/center/publish/blog')
+        window.open(routerGoto.href, '_blank');
+      } else {
+        this.$message.warning('请先登录再执行此操作(#^.^#)')
+      }
+    },
   }
 }
 </script>
@@ -54,6 +65,11 @@ export default {
 
 .front-search-button {
   border-radius: 0 20px 20px 0 !important;
+}
+
+.button-publish {
+  border-radius: 20px;
+  width: 80px;
 }
 
 </style>

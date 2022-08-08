@@ -1,11 +1,7 @@
 <template>
   <div>
-    <el-row :gutter="10">
+    <el-row :gutter="20">
       <el-col :xs="24" :sm="14" :md="14" :lg="14">
-        <div class="front-name">
-          <span class="front-name-title">通知公告</span>
-          <a href="#" class="front-more-btn">更多 ></a>
-        </div>
         <el-carousel
             indicator-position="outside"
             class="front-carousel"
@@ -16,6 +12,12 @@
             <img src="../../../public/images/01.jpeg" alt="" class="front-img">
           </el-carousel-item>
         </el-carousel>
+      </el-col>
+      <el-col :xs="24" :sm="10" :md="10" :lg="10">
+        <div class="front-name">
+          <span class="front-name-title">通知公告</span>
+          <a href="#" class="front-more-btn">更多 ></a>
+        </div>
       </el-col>
     </el-row>
   </div>
