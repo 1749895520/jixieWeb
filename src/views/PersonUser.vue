@@ -5,7 +5,18 @@
         <el-collapse-item title="个人信息" name="1">
           <el-card style="background-color: #c7e5f9" class="box-card">
             <el-row :gutter="12">
-              <el-col :span="16" :xs="24">
+              <el-col :xs="24" :sm="24" :md="8" :lg="8" style="display: flex;justify-content: center">
+                <el-card style="height: 100%;background-color: #f0f9ff;margin-top: 20px;margin-bottom: 20px">
+                  <img v-if="form.avatarUrl" :src="form.avatarUrl"
+                       class="avatar" style="width: 200px;height: 200px;border-radius: 10px"
+                       alt="">
+                  <i
+                      v-else
+                      class="el-icon-avatar"
+                      style="border-radius: 10px;width: 200px;height: 200px"/>
+                </el-card>
+              </el-col>
+              <el-col :xs="24" :sm="24" :md="16" :lg="16">
                 <el-card style="background-color: #f0f9ff">
                   <el-descriptions class="margin-top" :column="1" size="big" border>
                     <el-descriptions-item>
@@ -46,24 +57,11 @@
                     <el-descriptions-item>
                       <template slot="label">
                         <i class="el-icon-user-solid"></i>
-                        用户类型
+                        用户头衔
                       </template>
-                      <el-tag size="small">管理员</el-tag>
+                      <!--                      <el-tag size="small">管理员</el-tag>-->
                     </el-descriptions-item>
                   </el-descriptions>
-                </el-card>
-              </el-col>
-              <el-col :span="8" :xs="24" style="display: flex;justify-content: center">
-                <el-card style="height: 100%;background-color: #f0f9ff;margin-top: 20px">
-                  <img v-if="form.avatarUrl!==''" :src="form.avatarUrl"
-                       class="avatar" style="width: 200px;height: 200px;border-radius: 10px"
-                       alt="">
-                  <img
-                      v-if="form.avatarUrl===''"
-                      :src="'http://'+serverIp+':9090/file/avatar/avatar.png'"
-                      class="avatar"
-                      style="width: 200px;height: 200px;border-radius: 10px"
-                      alt="">
                 </el-card>
               </el-col>
             </el-row>
@@ -127,7 +125,37 @@
         </el-collapse-item>
         <el-collapse-item title="密码修改" name="3">
           <div>
-
+            <el-form
+                :inline="false"
+                :label-position="labelPosition"
+                label-width="150px"
+                class="demo-form-inline"
+                style="padding: 20px 5px 5px;position: relative;left: 20%;">
+              <el-form-item label="旧密码">
+                <el-input style="width: 50%" type="password" show-password v-model="oldPassword"
+                          autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="新密码">
+                <el-input style="width: 50%" type="password" show-password v-model="newPassword"
+                          autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="再输入一次新密码">
+                <el-input style="width: 50%" type="password" show-password v-model="newPasswordAgain"
+                          autocomplete="off"></el-input>
+              </el-form-item>
+            </el-form>
+            <el-row :gutter="10" style="margin-top: 5px">
+              <el-col :span="12" :xs="12" style="display: inline-flex;justify-content: right">
+                <el-button class=" animate__pulse" style="background-color: #c7e5f9;color: #fff"
+                           @click="cancel">取 消
+                </el-button>
+              </el-col>
+              <el-col :span="12" :xs="12" style="display: inline-flex;justify-content: left">
+                <el-button class=" animate__pulse" style="background-color: #c7e5f9;color: #fff"
+                           @click="savePassword">确 定
+                </el-button>
+              </el-col>
+            </el-row>
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -146,7 +174,10 @@ export default {
       activeName: '1',
       labelPosition: 'left',
       form: {},
-      user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
+      user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
+      oldPassword: '',
+      newPassword: '',
+      newPasswordAgain: '',
     }
   },
   created() {
@@ -163,6 +194,21 @@ export default {
         }
       })
     },
+    savePassword() {
+      let password = this.form.password
+      if (!this.oldPassword || !this.newPassword || !this.newPasswordAgain) {
+        this.$message.error('请输入内容 [○･｀Д´･ ○]')
+      } else if (this.oldPassword !== password) {
+        this.$message.error('密码输入错误 (ｷ｀ﾟДﾟ´)!!')
+      } else if (this.newPassword !== this.newPasswordAgain) {
+        this.$message.warning('两次输入的新密码不一致 o(╥﹏╥)o')
+      } else {
+        this.form.password = this.newPassword
+        this.save()
+        this.$message.success('请重新登录 (*^▽^*)')
+        this.$router.push('/login')
+      }
+    },
     save() {
       this.request.post("user/", this.form).then(res => {
         if (res.data) {
@@ -178,7 +224,6 @@ export default {
         } else {
           this.$message.error("保存失败")
         }
-        // location.reload()
       })
     },
     cancel() {
@@ -214,8 +259,8 @@ export default {
 }
 
 .avatar {
-  width: 178px;
-  height: 178px;
+  width: 10%;
+  height: 10%;
   display: block;
 }
 

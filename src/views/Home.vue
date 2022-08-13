@@ -6,7 +6,7 @@
           <div><i class="el-icon-user-solid" style="margin-right: 5px"/>已注册用户数量</div>
           <div class="box-centerHome-top">
             <div class="box-centerHome-number">
-              <animate-number from="0" :to="1000" duration="1000"></animate-number>
+              <animate-number v-if="delayShow" from="0" :to="userNum" duration="1000"></animate-number>
             </div>
             <img class="box-centerHome-image"
                  src="../../public/images/centerHome-1.jpg"
@@ -19,7 +19,7 @@
           <div><i class="el-icon-edit-outline" style="margin-right: 5px"/>已发布博客数量</div>
           <div class="box-centerHome-top">
             <div class="box-centerHome-number">
-              <animate-number from="0" :to="1000" duration="1500"></animate-number>
+              <animate-number v-if="delayShow" from="0" :to="blogNum" duration="1500"></animate-number>
             </div>
             <img class="box-centerHome-image"
                  src="../../public/images/centerHome-2.jpg"
@@ -29,10 +29,10 @@
       </el-col>
       <el-col :lg="12" :xs="24" class="box-centerHome-topCol">
         <el-card class="box-opacity box-card" style="color: #F56C6C">
-          <div><i class="el-icon-basketball" style="margin-right: 5px"/>已开展活动数量</div>
+          <div><i class="el-icon-basketball" style="margin-right: 5px"/>已发布动态数量</div>
           <div class="box-centerHome-top">
             <div class="box-centerHome-number">
-              <animate-number from="0" :to="1000" duration="500"></animate-number>
+              <animate-number v-if="delayShow" from="0" :to="officialNum" duration="500"></animate-number>
             </div>
             <img class="box-centerHome-image"
                  src="../../public/images/centerHome-3.jpg"
@@ -45,7 +45,7 @@
           <div><i class="el-icon-trophy" style="margin-right: 5px"/>OJ提交总次数</div>
           <div class="box-centerHome-top">
             <div class="box-centerHome-number">
-              <animate-number from="0" :to="1000" duration="2000"></animate-number>
+              <animate-number v-if="delayShow" from="0" :to="1000" duration="2000"></animate-number>
             </div>
             <img class="box-centerHome-image"
                  src="../../public/images/centerHome-4.jpg"
@@ -116,6 +116,10 @@ export default {
   name: "Home",
   data() {
     return {
+      delayShow: false,
+      userNum: 0,
+      blogNum: 0,
+      officialNum: 0,
       tableData: [],
       result: [],
       isLoading: true,
@@ -132,10 +136,14 @@ export default {
   },
   created() {
     this.load()
+    this.getUserNum()
+    this.getBlogNum()
+    this.getOfficialNum()
     this.isLoading = true;
     setTimeout(() => {
       this.isLoading = false;
-    }, 1000);
+      this.delayShow = true;
+    }, 500);
   },
   methods: {
     tableColor({row, rowIndex}) {
@@ -162,53 +170,26 @@ export default {
         this.total = res.data.total
       })
     },
+    getUserNum() {
+      this.request.get('/user/getNum').then(res => {
+        this.userNum = res
+      })
+    },
+    getBlogNum() {
+      this.request.get('/article/getNum').then(res => {
+        this.blogNum = res
+      })
+    },
+    getOfficialNum() {
+      this.request.get('/official/getNum').then(res => {
+        this.officialNum = res
+      })
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val
     },
   },
-  mounted() { //  页面元素渲染后才触发
-    /**
-     * 折线图 & 树状图
-     * @type {HTMLElement}
-     */
-    /*    let chartDom = document.getElementById('main');
-        let myChart = echarts.init(chartDom);
-
-        let option = {
-          title: {
-            text: '各季度用户注册数量图',
-            subtext: '趋势图',
-            left: 'center'
-          },
-          xAxis: {
-            type: 'category',
-            data: ["第一季度", "第二季度", "第三季度", "第四季度"]
-          },
-          yAxis: {
-            type: 'value'
-          },
-          series: [
-            {
-              data: [],
-              type: 'line'
-            },
-            {
-              data: [],
-              type: 'bar'
-            }
-          ]
-        };
-        option && myChart.setOption(option);
-
-        /!**
-         * 请求数据
-         *!/
-        this.request.get("/echarts/members").then(res => {
-          // option.xAxis.data = res.data.x
-          option.series[0].data = res.data
-          option.series[1].data = res.data
-          myChart.setOption(option)
-        })*/
+  mounted() {
 
     /**
      * 饼图
@@ -271,6 +252,7 @@ export default {
   flex-direction: row;
   position: relative;
   box-sizing: border-box;
+  animation-duration: 500ms;
 }
 
 .box-card-show >>> .el-card__body {

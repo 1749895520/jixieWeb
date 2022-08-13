@@ -11,13 +11,13 @@
       </div>
       <div style="display: inline-flex;width: 40px;height: 40px">
         <el-dropdown style="width: 70px; cursor: pointer">
-            <span><img v-if="this.$store.state.user.avatarUrl!==''" :src="this.$store.state.user.avatarUrl" alt=""
+            <span><img v-if="this.$store.state.user.avatarUrl" :src="this.$store.state.user.avatarUrl" alt=""
                        style="width: 40px;height: 40px;border-radius: 50%">
-              <img
-                  v-if="this.$store.state.user.avatarUrl===''"
-                  :src="'http://'+serverIp+':9090/file/avatar/avatar.png'"
+              <i
+                  v-else
                   style="width: 40px;height: 40px;border-radius: 50%"
-                  alt=""></span>
+                  class="el-icon-avatar"
+              /></span>
           <el-dropdown-menu slot="dropdown" class="dropdown" style="margin-top: 20px">
             <el-dropdown-item class="dropdown-item">
               <span style="text-decoration: none" @click="toCenter">个人中心</span>

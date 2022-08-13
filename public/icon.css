@@ -604,3 +604,211 @@
     font-size: 16px;
     visibility: hidden;
 }
+
+.el-icon-list-1 {
+    /* 图片路径 */
+    background: url('~./images/icon-list-1.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-list-1:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-list-2 {
+    /* 图片路径 */
+    background: url('~./images/icon-list-2.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-list-2:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-list-3 {
+    /* 图片路径 */
+    background: url('~./images/icon-list-3.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-list-3:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-list-4 {
+    /* 图片路径 */
+    background: url('~./images/icon-list-4.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-list-4:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-list-5 {
+    /* 图片路径 */
+    background: url('~./images/icon-list-5.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-list-5:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-blue-1 {
+    /* 图片路径 */
+    background: url('~./images/icon-blue-1.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-blue-1:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-blue-2 {
+    /* 图片路径 */
+    background: url('~./images/icon-blue-2.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-blue-2:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-blue-3 {
+    /* 图片路径 */
+    background: url('~./images/icon-blue-3.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-blue-3:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-blue-4 {
+    /* 图片路径 */
+    background: url('~./images/icon-blue-4.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-blue-4:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-blue-5 {
+    /* 图片路径 */
+    background: url('~./images/icon-blue-5.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-blue-5:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-blue-6 {
+    /* 图片路径 */
+    background: url('~./images/icon-blue-6.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-blue-6:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-blue-7 {
+    /* 图片路径 */
+    background: url('~./images/icon-blue-7.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-blue-7:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-blue-point {
+    /* 图片路径 */
+    background: url('~./images/icon-blue-point.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-blue-point:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-ring {
+    /* 图片路径 */
+    background: url('~./images/icon-ring.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-ring:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-new {
+    /* 图片路径 */
+    background: url('~./images/icon-new-red.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-new:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+
+.el-icon-avatar {
+    /* 图片路径 */
+    background: url('~./images/avatar.png') center no-repeat;
+    background-size: cover;
+    font-size: 10px;
+}
+
+.el-icon-avatar:before {
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}

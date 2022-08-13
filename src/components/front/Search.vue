@@ -15,7 +15,8 @@
       <div>
         <el-button class="front-search-button" type="primary" @click="load">搜索</el-button>
       </div>
-      <div style="margin-left: 50px">
+      <div style="margin-left: 20px">
+        <el-button class="button-publish" type="primary" @click="reset">刷新</el-button>
         <el-button class="button-publish" type="primary" @click="gotoPublish()">发布博客</el-button>
       </div>
     </div>
@@ -44,6 +45,10 @@ export default {
       } else {
         this.$message.warning('请先登录再执行此操作(#^.^#)')
       }
+    },
+    reset() {
+      this.$store.state.frontBlogName = ''
+      this.load()
     },
   }
 }

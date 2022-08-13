@@ -1,15 +1,17 @@
 <template>
   <div>
     <el-menu
+        v-if="this.$store.state.windowSize!=='xs' && this.$store.state.windowSize!=='sm'"
         :default-active="this.$store.state.frontPath"
         class="el-menu-demo front-top-menu"
         router
         mode="horizontal"
         @select="handleSelect">
       <el-menu-item class="front-menu" index="/front/home">协会首页</el-menu-item>
-      <el-menu-item class="front-menu" index="/front/data">协会资料</el-menu-item>
+      <el-menu-item class="front-menu" index="/front/data?id=72">协会资料</el-menu-item>
       <el-menu-item class="front-menu" index="/front/blog">协会博客</el-menu-item>
-      <el-menu-item class="front-menu" index="/front/more">更多</el-menu-item>
+      <el-menu-item class="front-menu" index="/front/totalUser">用户列表</el-menu-item>
+      <el-menu-item class="front-menu" index="/front/more?id=1">更多</el-menu-item>
     </el-menu>
   </div>
 </template>

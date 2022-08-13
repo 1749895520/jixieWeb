@@ -1,5 +1,5 @@
 <template>
-  <el-container style="height: 100%;position: fixed;width: 100%" class="animate__animated animate__slideInDown">
+  <el-container style="height: 100%;position: fixed;width: 100%" class="box-slideDown">
     <div class="el-aside">
       <Aside :isDrawer="isDrawer" :collapse="collapse"/>
     </div>
@@ -11,11 +11,8 @@
         <TagRouter/>
       </el-header>
       <el-main style="padding-bottom: 100px">
-        <transition
-            enter-active-class="animate__animated animate__zoomIn">
-          <!--        表示当前页面的子路由会在router-view里面展示   -->
-          <router-view/>
-        </transition>
+        <!--        表示当前页面的子路由会在router-view里面展示   -->
+        <router-view class="animate__animated animate__fadeIn"/>
       </el-main>
     </el-container>
     <!--    云朵-1  -->

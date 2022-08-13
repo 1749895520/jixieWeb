@@ -9,6 +9,14 @@
     display: none;
 }
 
+.mt-10 {
+    margin-top: 10px;
+}
+
+.pt-10 {
+    padding-top: 10px;
+}
+
 .w-100 {
     width: 99%;
 }
@@ -19,6 +27,18 @@
 
 .w-80 {
     width: 80%;
+}
+
+.w-10 {
+    width: 10%;
+}
+
+.w-5 {
+    width: 5%;
+}
+
+.w-0 {
+    width: 0;
 }
 
 .font-size-68 {
@@ -43,12 +63,19 @@
 
 
 .front-name {
+    display: flex;
     background-color: transparent;
     border: 0;
     padding: 0 0 8px 10px;
     margin-bottom: 5px;
     position: relative;
     border-bottom: 2px solid #006ED7;
+}
+
+.front-name-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
 }
 
 .front-more-btn {
@@ -58,6 +85,24 @@
     color: #666;
     font-size: 12px;
     text-decoration: none;
+    cursor: pointer;
+}
+
+.front-UserBox {
+    padding: 0 10px 0 10px;
+    background-color: #f0f0f0;
+}
+
+.front-blog-eachUser {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    font-size: 14px;
+    color: #aaa;
+}
+
+.front-more-btn:hover {
+    color: #006ED7;
 }
 
 .front-name-title {
@@ -66,19 +111,8 @@
     font-weight: 600;
     color: #006ED7;
     display: block;
-    padding-left: 15px;
     position: relative;
-}
-
-.front-name-title::before {
-    width: 5px;
-    height: 15px;
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 50%;
-    margin-top: -7px;
-    background-color: #006ED7;
+    padding-top: 3px;
 }
 
 .fixed {
@@ -138,6 +172,14 @@
     transition: 500ms;
 }
 
+.box-getUser {
+    cursor: pointer;
+}
+
+.box-getUser:hover {
+    color: #006ED7;
+}
+
 .disappear {
     display: none;
 }
@@ -160,6 +202,14 @@
 
 .mr-1 {
     margin-right: 0.25rem;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
 }
 
 .flex {

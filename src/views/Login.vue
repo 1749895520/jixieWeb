@@ -20,7 +20,7 @@
         style="position: absolute"
     />
     <div style="display: inline-flex;position:relative; margin-left: 30%;margin-top: 10%"
-         class="animate__animated animate__fadeIn">
+         class="box-fadeIn">
       <el-card class="form-box box-card" :style="form_box">
         <el-form :rules="registerRules" :ref="registerUser" :model="registerUser">
           <div class="register-box hidden" v-show="!this.loginOrRegister">
@@ -56,16 +56,26 @@
       </el-card>
       <el-card class="container box-card">
         <div class="con-box left">
-          <h2>欢迎来到<span>XXX</span></h2>
-          <p>快来这里<span>XXX</span></p>
-          <p>已有帐号</p>
-          <el-button @click="lor">去登陆</el-button>
+          <div>
+            <h2>欢迎来到</h2>
+            <h2><span>AHPU</span></h2>
+            <h2><span>计算机协会官网</span></h2>
+          </div>
+          <div style="margin-top: 100px">
+            <p>已有账号</p>
+            <el-button @click="lor">去登陆</el-button>
+          </div>
         </div>
         <div class="con-box right">
-          <h2>欢迎来到<span>XXX</span></h2>
-          <p>快来这里<span>XXX</span></p>
-          <p>没有账号？</p>
-          <el-button @click="lor">去注册</el-button>
+          <div>
+            <h2>欢迎来到</h2>
+            <h2><span>AHPU</span></h2>
+            <h2><span>计算机协会官网</span></h2>
+          </div>
+          <div style="margin-top: 100px">
+            <p>没有账号？</p>
+            <el-button @click="lor">去注册</el-button>
+          </div>
         </div>
       </el-card>
     </div>
@@ -200,7 +210,7 @@ export default {
 
 body {
   /* 100%窗口高度 */
-  height: 100vh;
+  min-height: 100vh;
   /* 弹性布局 水平+垂直布局 */
   display: flex;
   justify-content: center;

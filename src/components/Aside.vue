@@ -55,7 +55,7 @@
         class="hidden-sm-and-up"
         style="width: 830px;z-index: 999"
         ref="navDrawer"
-        :modal="false"
+        :modal-append-to-body="false"
     >
       <el-menu :default-active="$route.path" style="min-height: 100%; overflow-x: hidden; font-weight: 530;"
                active-text-color="#409eff"

@@ -21,7 +21,9 @@
                 class="front-blogUser-avatar"
                 alt="">
           </span>
-          <span class="front-blogUser-username">{{ blogUser.nickname }}</span>
+          <span class="front-blogUser-username box-getUser" @click="gotoUser(blogUser.id)">{{
+              blogUser.nickname
+            }}</span>
           <el-divider/>
           <div class="front-blogUser-information">
             <div class="front-blogUser-each-information">专业：{{ blogUser.speciality }}</div>
@@ -33,6 +35,7 @@
       <el-col :xs="24" :sm="24" :md="24" :lg="20">
         <el-card class="front-blogCard">
           <div class="front-name" style="margin: 20px">
+            <i class="el-icon-blue-6 front-name-icon"></i>
             <span class="front-name-title">博客内容</span>
           </div>
           <div class="front-blogTitle">
@@ -61,6 +64,7 @@
         </el-card>
         <el-card class="front-blog-comment-box">
           <div class="front-name">
+            <i class="el-icon-blue-7 front-name-icon"></i>
             <span class="front-name-title">评论内容</span>
           </div>
           <div class="front-blog-comment-input">
@@ -89,7 +93,8 @@
             <div v-if="item.userId!==user.id" style="display: flex">
               <!--          头像    -->
               <div class="front-blog-comment-avatar-box">
-                <el-image :src="item.avatarUrl" class="front-blog-comment-avatar"></el-image>
+                <el-image v-if="item.avatarUrl" :src="item.avatarUrl" class="front-blog-comment-avatar"></el-image>
+                <i v-else class="el-icon-avatar front-blog-comment-avatar"></i>
               </div>
               <!--            内容-->
               <div class="front-blog-comment-content-box">
@@ -116,7 +121,8 @@
               </div>
               <!--          头像    -->
               <div class="front-blog-comment-avatar-box-my">
-                <el-image :src="item.avatarUrl" class="front-blog-comment-avatar"></el-image>
+                <el-image v-if="item.avatarUrl" :src="item.avatarUrl" class="front-blog-comment-avatar"></el-image>
+                <i v-else class="el-icon-avatar front-blog-comment-avatar"></i>
               </div>
             </div>
             <!--            操作    -->
@@ -132,7 +138,9 @@
                 <div v-for="subItem in item.children" :key="subItem.id">
                   <div style="flex: 1;font-size: 14px;padding: 5px 0;line-height: 25px;border-bottom: 1px solid #aaa">
                     <div style="display: flex">
-                      <el-image :src="subItem.avatarUrl" style="width: 40px;height: 40px;border-radius: 50%"></el-image>
+                      <el-image v-if="subItem.avatarUrl" :src="subItem.avatarUrl"
+                                style="width: 40px;height: 40px;border-radius: 50%"></el-image>
+                      <i v-else class="el-icon-avatar" style="width: 40px;height: 40px;border-radius: 50%"></i>
                       <div style="display: flex;flex-direction: column;margin-left: 10px;max-width: 80%">
                         <div style="color: gray">{{ subItem.nickname }} {{ subItem.time }}</div>
                         <div class="front-blog-comment-content">{{ subItem.content }}</div>
@@ -151,8 +159,10 @@
                       <div
                           style="flex: 1;font-size: 14px;padding: 5px 0;line-height: 25px">
                         <div style="display: flex;margin-top: -10px;margin-left: 20px">
-                          <el-image :src="sonItem.avatarUrl"
+                          <el-image v-if="sonItem.avatarUrl" :src="sonItem.avatarUrl"
                                     style="width: 30px;height: 30px;border-radius: 50%;margin-left: 20px"></el-image>
+                          <i v-else class="el-icon-avatar"
+                             style="width: 30px;height: 30px;border-radius: 50%;margin-left: 20px"></i>
                           <div style="display: flex;flex-direction: column;margin-left: 10px;max-width: 80%">
                             <div style="color: gray">
                               {{ sonItem.nickname }}
@@ -280,6 +290,10 @@ export default {
         this.blogUser = res.data
       })
     },
+    gotoUser(id) {
+      let routerGoto = this.$router.resolve('/front/totalUser?id=' + id)
+      window.open(routerGoto.href, '_blank');
+    },
     handleTabFix() {
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
       let offsetTop = document.querySelector('#main').offsetTop
@@ -292,22 +306,23 @@ export default {
     save() {
       if (!this.user.id) {
         this.$message.warning('请登录后再操作[○･｀Д´･ ○]')
-      }
-      this.commentForm.articleId = this.articleId
-      if (this.commentForm.contentReply) {
-        this.commentForm.content = this.commentForm.contentReply
-      }
-      this.request.post("comment/", this.commentForm).then(res => {
-        if (res.data) {
-          this.$message.success("评论成功(*❦ω❦)")
-          this.commentForm = {}
-          this.loadComment()
-        } else {
-          this.$message.error("评论失败o(╥﹏╥)o")
+      } else {
+        this.commentForm.articleId = this.articleId
+        if (this.commentForm.contentReply) {
+          this.commentForm.content = this.commentForm.contentReply
         }
-        this.dialogFormVisible = false
-        this.load()
-      })
+        this.request.post("comment/", this.commentForm).then(res => {
+          if (res.data) {
+            this.$message.success("评论成功(*❦ω❦)")
+            this.commentForm = {}
+            this.loadComment()
+          } else {
+            this.$message.error("评论失败o(╥﹏╥)o")
+          }
+          this.dialogFormVisible = false
+          this.load()
+        })
+      }
     },
     isDel(id) {
       this.delId = id
@@ -373,19 +388,6 @@ export default {
 
 .front-TitleBox {
   margin: 10px 20px 10px 20px;
-}
-
-.front-UserBox {
-  padding: 0 10px 0 10px;
-  background-color: #f8f8f8;
-}
-
-.front-blog-eachUser {
-  width: 100%;
-  display: flex;
-  justify-content: right;
-  font-size: 14px;
-  color: #aaa;
 }
 
 .front-blog-main {

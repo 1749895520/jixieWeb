@@ -1,5 +1,7 @@
 <template>
-  <div class="front-background">
+  <div ref="tree" class="front-background">
+    <!--  跟随装饰  -->
+    <GIF style="position: absolute;z-index: 999;" v-if="this.$store.state.clickRing"/>
     <!--    背景云朵  -->
     <div class="front-cloud" style="opacity: 50%">
       <!--    云朵-1  -->
@@ -73,24 +75,60 @@
       <i class="el-icon-front-yun front-yun-icon"></i><!--表情-->
     </div>
     <!--    页眉导航栏   -->
-    <div class="animate__animated animate__slideInDown front-title box-onTop">
-      <div>
+    <div class="box-slideDown front-title box-onTop">
+      <div v-if="$store.state.windowSize==='lg'">
         <img src="../../../public/front-logo.png" alt="" class="front-title-icon">
       </div>
-      <div class="front-title-text" :class="{'box-isShow':this.$store.state.windowSize==='xs'}">AHPU 计算机协会</div>
+      <div v-else>
+        <img src="../../../public/front-logo.png" alt="" class="front-title-icon"
+             @click="$store.state.frontDrawer = true">
+      </div>
+      <div class="front-title-text">AHPU 计算机协会</div>
       <!--      菜单栏   -->
       <Menu/>
       <!--      搜索框   -->
-      <Search @load="load"/>
+      <Search v-if="this.$store.state.windowSize==='lg'" @load="load"/>
       <!--    登录用户信息-->
       <User/>
     </div>
+    <el-drawer
+        v-if=""
+        :visible.sync="$store.state.frontDrawer"
+        :with-header="false"
+        direction="ltr"
+        :before-close="collapse"
+        class="hidden-sm-and-up"
+        style="width: 830px;z-index: 999"
+        ref="navDrawer"
+        :modal-append-to-body="false"
+    >
+      <div style="background-color: #e0f2fe;display: flex">
+        <img src="../../../public/front-logo.png" alt="" class="front-title-icon"
+             style="margin: 10px"
+             @click="$store.state.frontDrawer = true">
+        <span style="font-size: 20px;font-weight: bold;margin-top: 15px">AHPU 计算机协会</span>
+      </div>
+      <el-menu :default-active="$route.path" style="min-height: 100%; overflow-x: hidden; font-weight: 530;"
+               active-text-color="#409eff"
+               class="el-menu-vertical-demo"
+               router
+               @select="handleSelect"
+      >
+        <el-menu-item class="front-menu" index="/front/home">协会首页</el-menu-item>
+        <el-menu-item class="front-menu" index="/front/data">协会资料</el-menu-item>
+        <el-menu-item class="front-menu" index="/front/blog">协会博客</el-menu-item>
+        <el-menu-item class="front-menu" index="/front/totalUser">用户列表</el-menu-item>
+        <el-menu-item class="front-menu" index="/front/more">更多</el-menu-item>
+      </el-menu>
+    </el-drawer>
     <!--    主页面   -->
-    <el-card class="front-main animate__animated animate__fadeIn "
-             :class="{'w-100':this.$store.state.windowSize==='xs','w-90':this.$store.state.windowSize==='sm' ||
+    <div ref="sro">
+      <el-card class="front-main animate__animated animate__fadeIn"
+               :class="{'w-100':this.$store.state.windowSize==='xs','w-90':this.$store.state.windowSize==='sm' ||
          this.$store.state.windowSize=== 'md','w-80':this.$store.state.windowSize==='lg'}">
-      <router-view ref="son"/>
-    </el-card>
+        <router-view ref="son"/>
+      </el-card>
+    </div>
     <!--    背景山 -->
     <div class="front-mountain ">
       <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
@@ -114,10 +152,12 @@ import {serverIp} from "../../../public/config";
 import Menu from './Menu'
 import User from "@/components/front/User";
 import Search from "@/components/front/Search";
+import GIF from "@/components/front/GIF";
 
 export default {
   name: "Front",
   components: {
+    GIF,
     Menu,
     User,
     Search
@@ -126,7 +166,6 @@ export default {
     return {
       centerUrl: serverIp + ':8080/center/home',
       screenWidth: null,
-      clickLamp: false,
       serverIp: serverIp,
       hoverHome: false,
       hoverData: false,
@@ -147,10 +186,12 @@ export default {
         this.screenWidth = document.body.clientWidth
       })()
     }
+    window.addEventListener('scroll', this.handleScroll) // 监听页面滚动
   },
   watch: {
     list() {
       this.timer()
+      this.ringing()
     },
     destroyed() {
       clearTimeout(this.timer)
@@ -163,9 +204,24 @@ export default {
     immediate: true
   },
   methods: {
+    // 获取页面滚动距离
+    handleScroll() {
+      this.$store.state.scrollY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+    },
+    // 滚动重置
+    beforeDestroy() {
+      window.removeEventListener('scroll', this.handleScroll)
+    },
     /*  兄弟组件通信  */
     load() {
       this.$refs.son.load()
+    },
+    handleSelect(key) {
+      this.$store.state.frontPath = key
+      this.$refs.navDrawer.closeDrawer()
+    },
+    collapse() {
+      this.$store.state.frontDrawer = false
     },
     getData() {
       let date = new Date();
@@ -254,6 +310,7 @@ export default {
   width: 40px;
   height: 40px;
   margin: 10px 20px;
+  background-color: transparent;
 }
 
 .front-title-text {
@@ -262,13 +319,20 @@ export default {
   font-weight: 800;
 }
 
+.front-menu {
+  position: relative;
+  width: 100px;
+  background-color: transparent;
+  border: 0;
+}
+
 /*  主页面 */
 .front-main {
   position: relative;
   z-index: 2;
   min-height: 100vh;
   background-color: #fff;
-  margin: 200px auto auto;
+  margin: 200px auto 20px;
   border: 1px solid #fff;
 }
 

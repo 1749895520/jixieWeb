@@ -13,7 +13,7 @@
           <el-button style="margin-left: 10px" type="primary" @click="save">发 布</el-button>
         </el-form-item>
         <el-form-item label="内容">
-          <mavon-editor style="position:relative;z-index: 2;min-height: 60vh;max-height: 60vh" class="box-opacity"
+          <mavon-editor style="min-height: 60vh;max-height: 100vh" class="box-opacity"
                         ref="md"
                         v-model="form.content"
                         :ishljs="true"
@@ -21,6 +21,18 @@
         </el-form-item>
       </el-form>
     </el-card>
+    <el-dialog
+        title="提示"
+        :modal-append-to-body="false"
+        :close-on-click-modal="false"
+        :visible.sync="dialogVisible"
+        width="30%">
+      <span>是否关闭当前页面？</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="cancel">取 消</el-button>
+    <el-button type="primary" @click="sure">确 定</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -32,6 +44,7 @@ export default {
   name: "PublishBlog",
   data() {
     return {
+      dialogVisible: false,
       form: {
         content: '',
         name: '',
@@ -63,7 +76,10 @@ export default {
       }
     },
     reset() {
-      this.form = {}
+      this.form = {
+        content: '',
+        name: '',
+      }
     },
     //  绑定imgAdd event
     imgAdd(pos, $file) {
@@ -81,6 +97,14 @@ export default {
         $vm.$img2Url(pos, res.data)
       })
     },
+    cancel() {
+      this.dialogVisible = false
+      this.$router.push('/center/system/index')
+    },
+    sure() {
+      this.dialogVisible = false
+      window.close()
+    }
   }
 }
 </script>

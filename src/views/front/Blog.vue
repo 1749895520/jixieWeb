@@ -9,6 +9,7 @@
         <el-card style="margin-bottom: 10px"
                  :class="{ 'fixed front-blog-person':isfixTab && this.$store.state.windowSize==='lg'}">
           <div class="front-name">
+            <i class="el-icon-blue-4 front-name-icon"></i>
             <span class="front-name-title">置顶博客</span>
           </div>
           <div v-for="item in tableData" :key="item.id">
@@ -27,6 +28,7 @@
       <el-col :xs="24" :sm="14" :md="14" :lg="18">
         <el-card>
           <div class="front-name">
+            <i class="el-icon-blue-5 front-name-icon"></i>
             <span class="front-name-title">所有博客</span>
           </div>
           <div class="front-blog-main">
@@ -36,7 +38,7 @@
               }}</span>
               <div class="pd-10 front-blog-eachUser">
                 <i class="el-icon-my-user mr-1"></i>
-                <span>{{ item.user }}</span>
+                <span class="box-getUser" @click="gotoUser(item.userId)">{{ item.user }}</span>
                 <i class="el-icon-my-time ml-5 mr-1"></i>
                 <span>{{ item.time }}</span>
               </div>
@@ -136,6 +138,10 @@ export default {
       let routerGoto = this.$router.resolve('/front/blogDetail?id=' + id)
       window.open(routerGoto.href, '_blank');
     },
+    gotoUser(id) {
+      let routerGoto = this.$router.resolve('/front/totalUser?id=' + id)
+      window.open(routerGoto.href, '_blank');
+    },
     handleTabFix() {
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
       let offsetTop = document.querySelector('#main').offsetTop
@@ -225,6 +231,10 @@ export default {
 }
 
 .front-pagination >>> button.btn-next {
+  background-color: #fff;
+}
+
+.front-pagination >>> li.number {
   background-color: #fff;
 }
 

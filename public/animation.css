@@ -1,0 +1,78 @@
+.box-fadeIn {
+    opacity: 100%;
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 100%;
+    }
+}
+
+.box-slideDown {
+    top: 0;
+    animation: slideDown 1s ease-out;
+}
+
+@keyframes slideDown {
+    0% {
+        top: -100px;
+    }
+    100% {
+        top: 0;
+    }
+}
+
+.box-zoomIn {
+    width: 100%;
+    height: 100%;
+    opacity: 100%;
+    animation: zoomIn 1s ease-out;
+}
+
+@keyframes zoomIn {
+    0% {
+        width: 50%;
+        height: 50%;
+        opacity: 50%;
+    }
+    100% {
+        width: 100%;
+        height: 100%;
+        opacity: 100%;
+    }
+}
+
+:root {
+    --animate-duration: 1s;
+    --animate-delay: 1s;
+    --animate-repeat: 1;
+}
+
+.box-animation {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-duration: var(--animate-duration);
+    animation-duration: var(--animate-duration);
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.box-slideIn {
+    -webkit-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+    -webkit-animation-name: flipInX;
+    animation-name: flipInX;
+}
+
+.box-bounceIn {
+    -webkit-animation-duration: calc(1s * 0.75);
+    animation-duration: calc(1s * 0.75);
+    -webkit-animation-duration: calc(var(--animate-duration) * 0.75);
+    animation-duration: calc(var(--animate-duration) * 0.75);
+    -webkit-animation-name: bounceIn;
+    animation-name: bounceIn;
+}

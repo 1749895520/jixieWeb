@@ -66,15 +66,15 @@
          'font-size-48':this.$store.state.windowSize==='sm',
          'font-size-42':this.$store.state.windowSize==='xs',
          'front-not-show':this.isTurnOn}">
-          <span style="animation-delay: .1s" class="animate__animated animate__flipInX">A</span>
-          <span style="animation-delay: .2s" class="animate__animated animate__flipInX">H</span>
-          <span style="animation-delay: .3s" class="animate__animated animate__flipInX">P</span>
-          <span style="animation-delay: .4s" class="animate__animated animate__flipInX">U</span>
-          <span style="animation-delay: .5s" class="animate__animated animate__flipInX">计</span>
-          <span style="animation-delay: .6s" class="animate__animated animate__flipInX">算</span>
-          <span style="animation-delay: .7s" class="animate__animated animate__flipInX">机</span>
-          <span style="animation-delay: .8s" class="animate__animated animate__flipInX">协</span>
-          <span style="animation-delay: .9s" class="animate__animated animate__flipInX">会</span>
+          <span style="animation-delay: .1s" class="box-animation box-slideIn">A</span>
+          <span style="animation-delay: .2s" class="box-animation box-slideIn">H</span>
+          <span style="animation-delay: .3s" class="box-animation box-slideIn">P</span>
+          <span style="animation-delay: .4s" class="box-animation box-slideIn">U</span>
+          <span style="animation-delay: .5s" class="box-animation box-slideIn">计</span>
+          <span style="animation-delay: .6s" class="box-animation box-slideIn">算</span>
+          <span style="animation-delay: .7s" class="box-animation box-slideIn">机</span>
+          <span style="animation-delay: .8s" class="box-animation box-slideIn">协</span>
+          <span style="animation-delay: .9s" class="box-animation box-slideIn">会</span>
         </div>
       </el-col>
     </el-row>
@@ -93,7 +93,9 @@
     <!--    开机  -->
     <div :style="openBox"
          :class="{'w-100':this.$store.state.windowSize==='xs','w-90':this.$store.state.windowSize==='sm' ||
-         this.$store.state.windowSize=== 'md','w-80':this.$store.state.windowSize==='lg'}" class="front-turn-on">
+         this.$store.state.windowSize=== 'md','w-80':this.$store.state.windowSize==='lg'}"
+         class="front-turn-on animate__animated animate__bounceIn"
+         style="animation-delay: .2s">
         <span @click="toTurnOn" :class="{'front-openbox-open':this.isTurnOn}" class="front-openbox">
         <i v-if="!isTurnOn" class="el-icon-front-turn-on front-turn-on-icon"></i>
       </span>
@@ -322,13 +324,13 @@ export default {
 
 /*  开机  */
 .front-turn-on {
-  position: absolute;
-  margin: auto;
+  position: relative;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: auto;
   z-index: 999;
   height: 80px;
-  top: 400px;
-  left: 50%;
-  transform: translate(-50%);
+  top: 80px;
 }
 
 .openbox {
@@ -338,7 +340,8 @@ export default {
 .front-openbox {
   display: flex;
   position: relative;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
   width: 80px;
   height: 100%;
   border-radius: 50%;
@@ -352,40 +355,49 @@ export default {
 }
 
 .front-openbox-open {
-  background-color: #e0f2fe;
+  opacity: 0.5;
+  display: flex;
+  position: relative;
+  background-color: #fff;
   border-radius: 4px;
-  margin: -180px auto auto;
-  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  top: -90px;
+  width: 80px;
   height: 100vh;
   animation: open 2s ease-in-out;
 }
 
 @keyframes open {
   0% {
-    margin: 0 auto auto;
+    opacity: 1;
     width: 80px;
+    top: 0;
     height: 100%;
     border-radius: 50%;
     background-color: #f38181;
   }
   30% {
-    margin: -180px auto auto;
+    opacity: 1;
+    top: -90px;
     width: 80px;
     height: 40px;
     border-radius: 4px;
-    background-color: #e0f2feEE;
+    background-color: #ffffff;
   }
   70% {
+    opacity: 1;
+    top: -90px;
     width: 100%;
     height: 40px;
     border-radius: 4px;
-    margin: -180px auto auto;
-    background-color: #e0f2feCC;
+    background-color: #ffffff;
   }
   100% {
-    background-color: #e0f2feAA;
+    opacity: 0.5;
+    top: -90px;
+    background-color: #ffffff;
     border-radius: 4px;
-    margin: -180px auto auto;
     width: 100%;
     height: 100vh;
   }

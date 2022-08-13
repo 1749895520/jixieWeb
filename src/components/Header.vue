@@ -30,13 +30,12 @@
         </div>
         <div style="display: inline-flex;width: 40px;height: 40px">
           <el-dropdown style="width: 70px; cursor: pointer">
-            <span><img v-if="this.$store.state.user.avatarUrl!==''" :src="this.$store.state.user.avatarUrl" alt=""
+            <span><img v-if="this.$store.state.user.avatarUrl" :src="this.$store.state.user.avatarUrl" alt=""
                        style="width: 40px;height: 40px;border-radius: 50%">
-              <img
-                  v-if="this.$store.state.user.avatarUrl===''"
-                  :src="'http://'+serverIp+':9090/file/avatar/avatar.png'"
-                  style="width: 40px;height: 40px;border-radius: 50%"
-                  alt=""></span>
+              <i
+                  v-else
+                  class="el-icon-avatar"
+                  style="width: 40px;height: 40px;border-radius: 50%"/></span>
             <el-dropdown-menu slot="dropdown" class="dropdown" style="margin-top: 20px">
               <el-dropdown-item class="dropdown-item">
                 <span style="text-decoration: none" @click="toFront">主页</span>
@@ -89,11 +88,7 @@ export default {
       }
     },
     toFront() {
-      if (this.$store.state.activePath !== '个人信息') {
-        this.$router.push('/front/home')
-      } else {
-        this.$message.error('当前已在个人信息界面 _(¦3」∠)_')
-      }
+      this.$router.push('/front/home')
     },
     logout() {
       this.$store.commit('logout')

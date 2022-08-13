@@ -21,7 +21,7 @@ const routes = [
         component: () => import('../views/404.vue'),
     },
     {
-        name: 'front',
+        name: '前台页面',
         path: '/front',
         redirect: '/front/home',
         component: () => import('../components/front/Front'),
@@ -33,7 +33,8 @@ const routes = [
             },
             {
                 name: '协会资料',
-                path: 'data'
+                path: 'data',
+                component: () => import('../views/front/Data')
             },
             {
                 name: '协会博客',
@@ -46,8 +47,19 @@ const routes = [
                 component: () => import('../views/front/BlogDetail')
             },
             {
+                name: '用户列表',
+                path: 'totalUser',
+                component: () => import('../views/front/TotalUser')
+            },
+            {
                 name: '更多',
                 path: 'more',
+                component: () => import('../views/front/More')
+            },
+            {
+                name: '更多详情',
+                path: 'moreDetail',
+                component: () => import('../views/front/MoreDetail')
             }
         ]
     }

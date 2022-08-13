@@ -1,27 +1,28 @@
 import Vue from 'vue'
+import Vuex from "vuex";
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import ElementUI from 'element-ui';
+import * as ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import '../public/gloable.css';
+import '../public/animation.css'
 import '../public/icon.css';
-import '../public/dark.css';
 import '../public/decoration.css'
-import request from "@/utils/request";
+import request from "../src/utils/request";
 import 'element-ui/lib/theme-chalk/display.css';
 import VueParticles from 'vue-particles'
-import animated from 'animate.css'
 import VueAnimateNumber from 'vue-animate-number'
 // main.js 全局注册
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
-// use
-Vue.use(mavonEditor)
-
+import VueRouter from 'vue-router'
 
 Vue.use(VueAnimateNumber)
-Vue.use(animated)
+// use
+Vue.use(mavonEditor)
+Vue.use(Vuex)
+Vue.use(VueRouter)
 
 Vue.config.productionTip = false
 

@@ -17,7 +17,7 @@
             :class="{'box-window-search':this.$store.state.windowOrPhone,'box-phone-search':!this.$store.state.windowOrPhone}"
             :style="{small:this.$store.state.windowOrPhone,big:!this.$store.state.windowOrPhone}">
           <el-button class="" type="primary" @click="load">搜索</el-button>
-          <el-button type="primary" @click="reset">重置</el-button>
+          <el-button type="primary" @click="reset">刷新</el-button>
         </div>
       </div>
       <div class="box-user-operation">
@@ -135,7 +135,7 @@
         </el-tree>
         <el-row :gutter="10">
           <el-col :span="12" style="display: flex;justify-content: right">
-            <el-button @click="menuDialogVisible = false">取 消</el-button>
+            <el-button @click="menuDialogVisible = false;checks = []">取 消</el-button>
           </el-col>
           <el-col :span="12" style="display: flex;justify-content: left">
             <el-button type="primary" @click="saveRoleMenu()">确 定</el-button>

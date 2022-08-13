@@ -20,6 +20,11 @@ const store = new Vuex.Store({
         isOpen: false,
         frontPath: '',
         frontBlogName: '',
+        frontOfficialName: '',
+        frontDrawer: false,
+        clickRing: false,
+        scrollY: 0,
+        isRing: false,
         /*  tag路由导航 */
         // 缓存组件页面
         catch_components: [],

@@ -27,7 +27,7 @@
             :class="{'box-window-search':this.$store.state.windowOrPhone,'box-phone-search':!this.$store.state.windowOrPhone}"
             :style="{small:this.$store.state.windowOrPhone,big:!this.$store.state.windowOrPhone}">
           <el-button class="" type="primary" @click="load">搜索</el-button>
-          <el-button type="primary" @click="reset">重置</el-button>
+          <el-button type="primary" @click="reset">刷新</el-button>
         </div>
       </div>
       <div class="box-user-operation">
