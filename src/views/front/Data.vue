@@ -51,8 +51,8 @@
           <div v-if="menuType">
             <div class="front-UserBox">
               <div class="pd-10 front-blog-eachUser">
-                <i class="el-icon-my-calendar mr-1"></i>
-                <span>{{ official.name }}</span>
+                <i v-if="$store.state.windowSize!=='xs'" class="el-icon-my-calendar mr-1"></i>
+                <span v-if="$store.state.windowSize!=='xs'">{{ official.name }}</span>
                 <i class="el-icon-my-user ml-5 mr-1"></i>
                 <span>{{ official.user }}</span>
                 <i class="el-icon-my-time ml-5 mr-1"></i>
@@ -121,7 +121,7 @@ export default {
           time: this.time
         }
       }).then(res => {
-        this.dataList = res.data.records
+        this.dataList = res.data.records.reverse()
         this.total = res.data.total
       })
     },

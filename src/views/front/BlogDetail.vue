@@ -142,7 +142,8 @@
                                 style="width: 40px;height: 40px;border-radius: 50%"></el-image>
                       <i v-else class="el-icon-avatar" style="width: 40px;height: 40px;border-radius: 50%"></i>
                       <div style="display: flex;flex-direction: column;margin-left: 10px;max-width: 80%">
-                        <div style="color: gray">{{ subItem.nickname }} {{ subItem.time }}</div>
+                        <div style="color: gray">{{ subItem.nickname }}<span v-if="$store.state.windowSize!=='xs'">
+                          {{ subItem.time }}</span></div>
                         <div class="front-blog-comment-content">{{ subItem.content }}</div>
                       </div>
                     </div>
@@ -167,7 +168,8 @@
                             <div style="color: gray">
                               {{ sonItem.nickname }}
                               <span style="font-weight: bold;color: #000">回复</span>
-                              {{ getReplyName(sonItem.replyId, sonItem) }} {{ sonItem.time }}
+                              {{ getReplyName(sonItem.replyId, sonItem) }}
+                              <span v-if="$store.state.windowSize!=='xs'"> {{ sonItem.time }}</span>
                             </div>
                             <div class="front-blog-comment-content">{{ sonItem.content }}</div>
                           </div>
@@ -236,20 +238,25 @@
 
 <script>
 import {serverIp} from "../../../public/config";
+import Storage from "../../../public/storage";
+
+let storage = new Storage()
 
 export default {
   name: "BlogDetail",
   data() {
     return {
       articleId: this.$route.query.id,
-      user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
+      user: storage.getItem("user") ? storage.getItem('user') : {},
       blog: {},
       userId: 0,
       blogUser: {},
       serverIp: serverIp,
       isfixTab: false,
       comments: [],
-      commentForm: {},
+      commentForm: {
+        contentReply: ''
+      },
       delId: 0,
       delDialogVisible: false,
       dialogFormVisible: false,
@@ -281,7 +288,7 @@ export default {
       })
     },
     loadComment() {
-      this.request.get("comment/tree/" + this.articleId).then(res => {
+      this.request.get("comment/tree/getBlog/" + this.articleId).then(res => {
         this.comments = res.data
       })
     },
@@ -311,7 +318,7 @@ export default {
         if (this.commentForm.contentReply) {
           this.commentForm.content = this.commentForm.contentReply
         }
-        this.request.post("comment/", this.commentForm).then(res => {
+        this.request.post("comment/postBlog", this.commentForm).then(res => {
           if (res.data) {
             this.$message.success("评论成功(*❦ω❦)")
             this.commentForm = {}

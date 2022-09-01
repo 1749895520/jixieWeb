@@ -43,10 +43,10 @@
         </el-table-column>
         <el-table-column prop="time" label="发布时间" min-width="100px">
         </el-table-column>
-        <el-table-column label="操作" width="200px" fixed="right">
+        <el-table-column label="操作" width="130px" fixed="right">
           <template slot-scope="scope">
             <div>
-              <el-button size="mini" class="el-button-small" @click="handleEdit(scope.row)">编辑</el-button>
+              <el-button size="mini" class="el-button-small" @click="handleEdit(scope.row.id)">编辑</el-button>
               <el-button size="mini" type="danger" class="el-button-small" @click="isDel(scope.row.id)">删除</el-button>
             </div>
           </template>
@@ -229,10 +229,9 @@ export default {
       this.viewContent = content
       this.dialogViewVisible = true
     },
-    handleEdit(row) {
-      this.form = row
-      this.dialogFormVisible = true
-      this.load()
+    handleEdit(id) {
+      let routerGoto = this.$router.resolve('/center/publish/blog?id=' + id)
+      window.open(routerGoto.href, '_blank');
     },
     isDel(id) {
       this.delId = id

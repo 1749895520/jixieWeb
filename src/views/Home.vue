@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row :gutter="20" class="box-statistics">
+    <el-row :gutter="20" class="box-statistics" v-if="delayShow">
       <el-col :lg="12" :xs="24" class="box-centerHome-topCol">
         <el-card class="box-opacity box-card" style="color: #409EFF">
           <div><i class="el-icon-user-solid" style="margin-right: 5px"/>已注册用户数量</div>
@@ -54,7 +54,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="20">
+    <el-row :gutter="20" v-if="delayShow">
       <el-col :lg="10" :xs="24" class="box-centerHome-topCol">
         <el-card class="box-card box-opacity box-card-show">
           <div class="box-echarts-title">
@@ -72,11 +72,17 @@
           >
             <el-table-column prop="avatarUrl" label="头像" min-width="30px">
               <template slot-scope="scope">
-                <img :src="scope.row.avatarUrl"
+                <img v-if="scope.row.avatarUrl"
+                     :src="scope.row.avatarUrl"
                      style="width:20px; height:19px;border-radius: 50%;display: inline-flex" alt=""></img>
+                <i
+                    v-else
+                    style="width:20px; height:19px;border-radius: 50%;display: inline-flex"
+                    class="el-icon-avatar"
+                />
               </template>
             </el-table-column>
-            <el-table-column prop="nickname" label="昵称" min-width="80px">
+            <el-table-column prop="nickname" label="昵称" min-width="30px">
             </el-table-column>
             <el-table-column prop="speciality" label="专业" min-width="50px">
             </el-table-column>
@@ -94,6 +100,7 @@
           </div>
           <div style="display: flex; justify-content: center;width: 100%;height: 250px"
                id="PI"
+               v-loading="isLoading"
                class="box-echarts-body"/>
         </el-card>
       </el-col>
@@ -143,7 +150,7 @@ export default {
     setTimeout(() => {
       this.isLoading = false;
       this.delayShow = true;
-    }, 500);
+    }, 1000);
   },
   methods: {
     tableColor({row, rowIndex}) {
@@ -190,57 +197,58 @@ export default {
     },
   },
   mounted() {
-
-    /**
-     * 饼图
-     * @type {HTMLElement}
-     */
-    let PIDom = document.getElementById('PI');
-    let PIChart = echarts.init(PIDom);
-    let PIoption = {
-      tooltip: {
-        trigger: 'item',
-        formatter: "{a} <br/>{b}: {c} ({d}%)"//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。
-      },
-      legend: {
-        orient: 'vertical',
-        left: 'left'
-      },
-      series: [
-        {
-          name: '人数',
-          type: 'pie',
-          radius: '70%',
-          //标签
-          label: {
-            show: true,
-            position: 'inside',
-            formatter: '{d}%',//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。{d}数据会根据value值计算百分比
-          },
-          data: this.result,
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
+    setTimeout(() => {
+      /**
+       * 饼图
+       * @type {HTMLElement}
+       */
+      let PIDom = document.getElementById('PI');
+      let PIChart = echarts.init(PIDom);
+      let PIoption = {
+        tooltip: {
+          trigger: 'item',
+          formatter: "{a} <br/>{b}: {c} ({d}%)"//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left'
+        },
+        series: [
+          {
+            name: '人数',
+            type: 'pie',
+            radius: '70%',
+            //标签
+            label: {
+              show: true,
+              position: 'inside',
+              formatter: '{d}%',//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。{d}数据会根据value值计算百分比
+            },
+            data: this.result,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
             }
           }
+        ]
+      };
+      PIoption && PIChart.setOption(PIoption);
+      /**
+       * 请求数据
+       */
+      this.request.get("/echarts/speciality").then(res => {
+        for (let i = 0; i < res.data.length; i++) {
+          let d = {name: '', value: 0}
+          d.name = res.data[i].name
+          d.value = res.data[i].value
+          this.result.push(d)
         }
-      ]
-    };
-    PIoption && PIChart.setOption(PIoption);
-    /**
-     * 请求数据
-     */
-    this.request.get("/echarts/speciality").then(res => {
-      for (let i = 0; i < res.data.length; i++) {
-        let d = {name: '', value: 0}
-        d.name = res.data[i].name
-        d.value = res.data[i].value
-        this.result.push(d)
-      }
-      PIChart.setOption(PIoption)
-    })
+        PIChart.setOption(PIoption)
+      })
+    }, 1000)
   }
 }
 </script>

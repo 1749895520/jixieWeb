@@ -17,5 +17,10 @@ export default {
 </script>
 
 <style>
-
+#app {
+  height: 100%;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+}
 </style>

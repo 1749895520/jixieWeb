@@ -1,6 +1,9 @@
 import axios from 'axios'
 import ElementUI from "element-ui";
 import {serverIp} from "../../public/config";
+import Storage from "../../public/storage";
+
+let storage = new Storage()
 
 const request = axios.create({
     baseURL: `http://${serverIp}:9090/`,
@@ -13,7 +16,7 @@ const request = axios.create({
 request.interceptors.request.use(config => {
     config.headers['Content-Type'] = 'application/json;charset=utf-8';
 
-    let user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
+    let user = storage.getItem('user') ? storage.getItem('user') : null
     if (user) {
         config.headers['token'] = user.token;  // 设置请求头
     }
@@ -48,7 +51,6 @@ request.interceptors.response.use(
         return Promise.reject(error)
     }
 )
-
 
 export default request
 

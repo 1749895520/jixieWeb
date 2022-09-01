@@ -86,7 +86,7 @@
               <el-col :span="16" :xs="24">
                 <el-form
                     :inline="false"
-                    :label-position="labelPosition"
+                    :label-position="$store.state.windowSize!=='xs'?'left':'top'"
                     label-width="80px"
                     class="demo-form-inline"
                     style="margin: 20px 5px 5px;">
@@ -124,39 +124,44 @@
           </div>
         </el-collapse-item>
         <el-collapse-item title="密码修改" name="3">
-          <div>
-            <el-form
-                :inline="false"
-                :label-position="labelPosition"
-                label-width="150px"
-                class="demo-form-inline"
-                style="padding: 20px 5px 5px;position: relative;left: 20%;">
-              <el-form-item label="旧密码">
-                <el-input style="width: 50%" type="password" show-password v-model="oldPassword"
-                          autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="新密码">
-                <el-input style="width: 50%" type="password" show-password v-model="newPassword"
-                          autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="再输入一次新密码">
-                <el-input style="width: 50%" type="password" show-password v-model="newPasswordAgain"
-                          autocomplete="off"></el-input>
-              </el-form-item>
-            </el-form>
-            <el-row :gutter="10" style="margin-top: 5px">
-              <el-col :span="12" :xs="12" style="display: inline-flex;justify-content: right">
-                <el-button class=" animate__pulse" style="background-color: #c7e5f9;color: #fff"
-                           @click="cancel">取 消
-                </el-button>
-              </el-col>
-              <el-col :span="12" :xs="12" style="display: inline-flex;justify-content: left">
-                <el-button class=" animate__pulse" style="background-color: #c7e5f9;color: #fff"
-                           @click="savePassword">确 定
-                </el-button>
-              </el-col>
-            </el-row>
-          </div>
+          <el-row>
+            <el-col :xs="0" :sm="4" :md="4" :lg="4" style="border-bottom: 1px solid transparent"/>
+            <el-col :xs="24" :sm="24" :md="24" :lg="16">
+              <div>
+                <el-form
+                    :inline="false"
+                    :label-position="$store.state.windowSize!=='xs'?'left':'top'"
+                    label-width="150px"
+                    class="demo-form-inline"
+                    style="padding: 20px 5px 5px;position: relative;">
+                  <el-form-item label="旧密码">
+                    <el-input type="password" show-password v-model="oldPassword"
+                              autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="新密码">
+                    <el-input type="password" show-password v-model="newPassword"
+                              autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="再输入一次新密码">
+                    <el-input type="password" show-password v-model="newPasswordAgain"
+                              autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-form>
+                <el-row :gutter="10" style="margin-top: 5px">
+                  <el-col :span="12" :xs="12" style="display: inline-flex;justify-content: right">
+                    <el-button class=" animate__pulse" style="background-color: #c7e5f9;color: #fff"
+                               @click="cancel">取 消
+                    </el-button>
+                  </el-col>
+                  <el-col :span="12" :xs="12" style="display: inline-flex;justify-content: left">
+                    <el-button class=" animate__pulse" style="background-color: #c7e5f9;color: #fff"
+                               @click="savePassword">确 定
+                    </el-button>
+                  </el-col>
+                </el-row>
+              </div>
+            </el-col>
+          </el-row>
         </el-collapse-item>
       </el-collapse>
     </el-card>
@@ -165,6 +170,9 @@
 
 <script>
 import {serverIp} from "../../public/config";
+import Storage from "../../public/storage";
+
+let storage = new Storage()
 
 export default {
   name: "Person",
@@ -172,9 +180,8 @@ export default {
     return {
       serverIp: serverIp,
       activeName: '1',
-      labelPosition: 'left',
       form: {},
-      user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
+      user: storage.getItem("user") ? storage.getItem('user') : {},
       oldPassword: '',
       newPassword: '',
       newPasswordAgain: '',
@@ -185,10 +192,10 @@ export default {
   },
   methods: {
     async getUser() {
-      return (await this.request.get('user/username/' + this.user.username)).data
+      return (await this.request.get('user/' + this.user.id)).data
     },
     load() {
-      this.request.get('user/username/' + this.user.username).then(res => {
+      this.request.get('user/' + this.user.id).then(res => {
         if (res.code === '200') {
           this.form = res.data;
         }
@@ -206,7 +213,10 @@ export default {
         this.form.password = this.newPassword
         this.save()
         this.$message.success('请重新登录 (*^▽^*)')
-        this.$router.push('/login')
+        this.$router.push('/front/home')
+        setTimeout(() => {
+          location.reload()
+        }, 1000)
       }
     },
     save() {
@@ -215,9 +225,9 @@ export default {
           this.$message.success("保存成功")
           //  更新浏览器的缓存信息
           this.getUser().then(res => {
-            res.token = JSON.parse(localStorage.getItem('user')).token
+            res.token = storage.getItem('user').token
             this.$store.state.user = res
-            localStorage.setItem('user', JSON.stringify(res))
+            storage.setItem('user', res)
           })
           //  返回个人信息
           this.activeName = '1'

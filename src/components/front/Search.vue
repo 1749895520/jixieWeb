@@ -24,7 +24,9 @@
 </template>
 
 <script>
+import Storage from "../../../public/storage";
 
+let storage = new Storage()
 export default {
   name: "Search",
   data() {
@@ -39,7 +41,7 @@ export default {
       this.$emit('load')
     },
     gotoPublish() {
-      if (localStorage.getItem('user')) {
+      if (storage.getItem('user')) {
         let routerGoto = this.$router.resolve('/center/publish/blog')
         window.open(routerGoto.href, '_blank');
       } else {

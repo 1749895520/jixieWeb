@@ -43,7 +43,7 @@
       </el-table-column>
       <el-table-column prop="time" label="发布时间" min-width="100px">
       </el-table-column>
-      <el-table-column label="操作" width="200px" fixed="right">
+      <el-table-column label="操作" width="130px" fixed="right">
         <template slot-scope="scope">
           <div>
             <el-button size="mini" class="el-button-small" @click="handleEdit(scope.row.id)">编辑</el-button>
@@ -218,7 +218,7 @@ export default {
     },
     doDelAll() {
       let ids = this.multipleSelection.map(v => v.id)
-      this.request.post("official/del/batch", ids).then(res => {
+      this.request.post("official/del/batch/2", ids).then(res => {
         if (res.data) {
           this.$message.success("批量删除成功")
           this.load()

@@ -24,7 +24,7 @@
     <el-col :span="8" :xs="16">
       <!--    登录用户信息-->
       <div class="box-user-information">
-        <div>
+        <div v-if="$store.state.windowSize==='lg'">
           <p style="font-size: 14px;text-align: right">你好，{{ this.$store.state.user.nickname }}</p>
           <p style="font-size: 14px;color: #6b7280;text-align: right">{{ this.$store.state.strDate }}</p>
         </div>
@@ -93,6 +93,10 @@ export default {
     logout() {
       this.$store.commit('logout')
       this.$message.success('退出成功 ヾ(￣▽￣)Bye~Bye~')
+      this.$router.push('/front/home')
+      setTimeout(() => {
+        location.reload()
+      }, 2000)
     },
   },
   created() {

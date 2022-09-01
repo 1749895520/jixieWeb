@@ -37,13 +37,16 @@
             <div v-for="item in tableData" :key="item.id">
               <div class="front-news" :key="tableShow">
                 <i class="el-icon-blue-point icon-point"></i>
-                <span v-if="menuType!=='3'" @click="goto(item.id)" class="front-news-title">{{
-                    getTitle(item.name, 35)
-                  }}</span>
-                <span v-else @click="gotoOther(item.content)" class="front-news-title">{{
-                    getTitle(item.name, 35)
-                  }}</span>
-                <span class="front-news-time">
+                <el-tooltip class="item" effect="dark" :content="item.name" placement="top-start">
+                <span v-if="menuType!=='3'" @click="goto(item.id)" class="front-news-title">
+                  {{ getTitle(item.name, getNum) }}
+                </span>
+                  <span v-else @click="gotoOther(item.content)" class="front-news-title">{{
+                      getTitle(item.name, 35)
+                    }}
+                </span>
+                </el-tooltip>
+                <span v-if="$store.state.windowSize!=='xs'" class="front-news-time">
                 {{ item.time }}
             </span>
               </div>
@@ -86,6 +89,7 @@ export default {
       noticeList: [],
       newsList: [],
       linkList: [],
+      getNum: 35,
       noticeTotal: 0,
       noticePageNum: 1,
       noticePageSize: 15,
@@ -114,6 +118,7 @@ export default {
     this.loadLink()
     setTimeout(() => {
       this.load()
+      this.getNum = this.$store.state.windowSize === 'lg' ? 35 : 15
     }, 200)
   },
   watch: {

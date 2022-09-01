@@ -5,10 +5,11 @@
           :inline="false"
           class="demo-form-inline"
           label-width="60px"
+          :label-position="$store.state.windowSize!=='xs'?'left':'top'"
           style="height: 100%"
       >
         <el-form-item label="标题">
-          <el-input maxlength="50" style="width: 60%" v-model="form.name" autocomplete="off"></el-input>
+          <el-input maxlength="50" style="width: 50%" v-model="form.name" autocomplete="off"></el-input>
           <el-button style="margin-left: 10px" @click="reset">重 置</el-button>
           <el-button style="margin-left: 10px" type="primary" @click="save">发 布</el-button>
         </el-form-item>
@@ -99,7 +100,6 @@ export default {
       })
     },
     save() {
-      console.log(this.form)
       if (this.form.name === null || this.form.name === '') {
         this.$message.error('文章标题不能为空！')
       } else if (this.form.content === '') {

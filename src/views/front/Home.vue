@@ -2,7 +2,8 @@
   <div>
     <el-row :gutter="30">
       <el-col :xs="24" :sm="14" :md="14" :lg="14">
-        <i class="el-icon-ring box-ring" @click="$store.state.clickRing = !$store.state.clickRing"/>
+        <i v-if="$store.state.windowSize!=='xs'" class="el-icon-ring box-ring" @click="$store.state.clickRing =
+        !$store.state.clickRing"/>
         <el-carousel
             indicator-position="outside"
             class="front-carousel"
@@ -40,7 +41,9 @@
             <i v-if="isToday(item.time)" class="el-icon-new front-name-icon" style="left: 5px;
             bottom: 7px;position: relative"/>
           </div>
-          <div class="front-notice-icon" :class="'el-icon-list-'+(index+1)"/>
+          <div v-if="$store.state.windowSize==='lg'">
+            <div class="front-notice-icon" :class="'el-icon-list-'+(index+1)"/>
+          </div>
         </div>
       </el-col>
       <el-col :xs="24" :sm="16" :md="16" :lg="16">
@@ -52,10 +55,14 @@
         <div v-for="(item,index) in newsList" v-if="index<7">
           <div class="front-news">
             <i class="el-icon-blue-point icon-point"></i>
-            <span @click="goto(item.id)" class="front-news-title">{{ getTitle(item.name, 15) }}</span>
+            <el-tooltip class="item" effect="dark" :content="item.name" placement="top-start">
+            <span @click="goto(item.id)" class="front-news-title">
+              {{ getTitle(item.name, 20) }}
+            </span>
+            </el-tooltip>
             <i v-if="isToday(item.time)" class="el-icon-new front-name-icon" style="left: 5px;
             bottom: 5px;position: relative"/>
-            <span class="front-news-time">
+            <span v-if="$store.state.windowSize!=='xs'" class="front-news-time">
                 {{ item.time }}
             </span>
           </div>
@@ -223,6 +230,8 @@ export default {
 }
 
 .front-notice-icon {
+  position: absolute;
+  right: 10px;
   height: 50px;
   width: 50px;
   margin-top: 5px;
@@ -236,7 +245,7 @@ export default {
 }
 
 .front-notice-title {
-  width: 65%;
+  width: auto;
   margin-left: 10px;
   padding-top: 12px;
   cursor: pointer;

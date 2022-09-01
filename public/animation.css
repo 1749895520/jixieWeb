@@ -19,7 +19,21 @@
 
 @keyframes slideDown {
     0% {
-        top: -100px;
+        top: -100vh;
+    }
+    100% {
+        top: 0;
+    }
+}
+
+.box-slideUp {
+    top: 0;
+    animation: slideUp 2s ease-out;
+}
+
+@keyframes slideUp {
+    0% {
+        top: 100vh;
     }
     100% {
         top: 0;

@@ -1,19 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from "@/store"
+import Storage from "../../public/storage";
 
 Vue.use(VueRouter)
+let storage = new Storage()
 
 const routes = [
     {
-        name: '展示',
+        name: '',
         path: '/show',
         component: () => import('../components/Show'),
-    },
-    {
-        name: '登录',
-        path: '/login',
-        component: () => import('../views/Login.vue'),
     },
     {
         name: '404',
@@ -136,13 +133,22 @@ setRoutes()
 router.beforeEach((to, from, next) => {
     if (to.path === '/') {
         next('/show')
+        return
+    }
+    if (storage.getItem('user') === false) {
+        alert('当前登录信息已过期，请重新登录！')
+        if (to.path.split('/')[1] === 'center') {
+            next('/front/home')
+        } else {
+            location.reload()
+        }
     }
     localStorage.setItem("currentPathName", to.name) //  设置当前路由名称，为了在header组件中使用
     store.commit("setPath") //  触发store的数据更新
     let paths = to.path.split("/");
     if (paths[1] !== 'front') {
         //  未找到路由的情况
-        if (to.matched.length === 0 && from.path !== '/login') {
+        if (to.matched.length === 0) {
             //  获取当前menus
             const storeMenus = JSON.parse(localStorage.getItem('menus'))
             if (storeMenus) {
@@ -153,10 +159,17 @@ router.beforeEach((to, from, next) => {
         }
     }
     if (to.name) {
-        document.title = to.name + '-AHPU 计算机协会'
+        document.title = to.name !== '' ? to.name + '-AHPU 计算机协会' : 'AHPU 计算机协会'
     }
     next()
 
 })
+
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+    if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+    return originalPush.call(this, location).catch(err => err)
+}
 
 export default router

@@ -1,90 +1,96 @@
 <template>
-  <el-container style="height: 100%;position: fixed;width: 100%" class="box-slideDown">
-    <div class="el-aside">
-      <Aside :isDrawer="isDrawer" :collapse="collapse"/>
-    </div>
-    <el-container>
-      <el-header style="border-bottom: 1px solid white">
-        <Header style="height: 100%" :collapseBtnClass="collapseBtnClass" :collapse="collapse"/>
-      </el-header>
-      <el-header style="border-bottom: 1px solid white;height: 50px">
-        <TagRouter/>
-      </el-header>
-      <el-main style="padding-bottom: 100px">
-        <!--        表示当前页面的子路由会在router-view里面展示   -->
-        <router-view class="animate__animated animate__fadeIn"/>
-      </el-main>
+  <transition leave-active-class="animate__animated animate__slideOutUp">
+    <el-container style="height: 100%;position: fixed;width: 100%;animation-duration: 2s"
+                  :class="{'animate__animated animate__fadeInDown':this.$store.state.windowSize!=='xs'}">
+      <div class="el-aside">
+        <Aside :isDrawer="isDrawer" :collapse="collapse"/>
+      </div>
+      <el-container>
+        <el-header style="border-bottom: 1px solid white">
+          <Header style="height: 100%" :collapseBtnClass="collapseBtnClass" :collapse="collapse"/>
+        </el-header>
+        <el-header style="border-bottom: 1px solid white;height: 50px">
+          <TagRouter/>
+        </el-header>
+        <el-main style="padding-bottom: 100px">
+          <!--        表示当前页面的子路由会在router-view里面展示   -->
+          <router-view class="animate__animated animate__fadeIn"/>
+        </el-main>
+      </el-container>
+      <!--    云朵-1  -->
+      <div style='position:fixed; z-index:999;top: 75%' class="cloud-pos-1">
+        <div class="container cloud-1">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-2">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-3">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-4">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-5">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-6">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-7">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-8">
+          <div class="cloud"/>
+        </div>
+      </div>
+      <!--    云朵-2  -->
+      <div style='position:fixed; z-index:999;top: 75%' class="cloud-pos-2">
+        <div class="container cloud-9">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-10">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-4">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-5">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-6">
+          <div class="cloud"/>
+        </div>
+      </div>
+      <!--    云朵-3  -->
+      <div style='position:fixed; z-index:999;top: 75%' class="cloud-pos-3">
+        <div class="container cloud-9">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-10">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-4">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-5">
+          <div class="cloud"/>
+        </div>
+        <div class="container cloud-6">
+          <div class="cloud"/>
+        </div>
+      </div>
     </el-container>
-    <!--    云朵-1  -->
-    <div style='position:fixed; z-index:999;top: 75%' class="cloud-pos-1">
-      <div class="container cloud-1">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-2">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-3">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-4">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-5">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-6">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-7">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-8">
-        <div class="cloud"/>
-      </div>
-    </div>
-    <!--    云朵-2  -->
-    <div style='position:fixed; z-index:999;top: 75%' class="cloud-pos-2">
-      <div class="container cloud-9">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-10">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-4">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-5">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-6">
-        <div class="cloud"/>
-      </div>
-    </div>
-    <!--    云朵-3  -->
-    <div style='position:fixed; z-index:999;top: 75%' class="cloud-pos-3">
-      <div class="container cloud-9">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-10">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-4">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-5">
-        <div class="cloud"/>
-      </div>
-      <div class="container cloud-6">
-        <div class="cloud"/>
-      </div>
-    </div>
-  </el-container>
+  </transition>
 </template>
 <script>
 
 import Aside from "@/components/Aside";
 import Header from "@/components/Header";
 import TagRouter from "@/components/TagRouter";
+import Storage from "../../public/storage";
+
+let storage = new Storage()
 
 export default {
   name: 'Home',
@@ -149,7 +155,7 @@ export default {
       }
     },
     getUser() {
-      let id = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).id : ""
+      let id = storage.getItem("user") ? storage.getItem('user').id : ""
       if (id) {
         this.$store.state.asidePath = localStorage.getItem("menus") ? JSON.parse(localStorage.getItem("menus")) : ""
         this.request.get("/user/" + id).then(res => {

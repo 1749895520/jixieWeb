@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="background-color: #0f0f0faa;">
     <vue-particles
         class="login-bg wrapper"
         color="#f0f0f0"
@@ -19,9 +19,14 @@
         clickMode="push"
         style="position: absolute"
     />
-    <div style="display: inline-flex;position:relative; margin-left: 30%;margin-top: 10%"
+    <div style="position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%)"
+         v-if="this.$store.state.windowSize!=='xs'"
          class="box-fadeIn">
       <el-card class="form-box box-card" :style="form_box">
+        <div style="position:absolute;top: 10px;right: 20px;font-size: 30px;" class="box-login-close"
+             @click="$store.state.isLogin = false">
+          <span><i class="el-icon-circle-close"></i></span>
+        </div>
         <el-form :rules="registerRules" :ref="registerUser" :model="registerUser">
           <div class="register-box hidden" v-show="!this.loginOrRegister">
             <h1>register</h1>
@@ -79,11 +84,63 @@
         </div>
       </el-card>
     </div>
+    <div v-else>
+      <el-card class="form-box box-card" style="left: 50%;top: 50%;transform: translate(-50%,-50%)">
+        <div style="position:absolute;top: 10px;right: 20px;font-size: 30px;" class="box-login-close"
+             @click="$store.state.isLogin = false">
+          <span><i class="el-icon-circle-close"></i></span>
+        </div>
+        <el-form :rules="registerRules" :ref="registerUser" :model="registerUser">
+          <div class="register-box hidden" v-show="!this.loginOrRegister">
+            <h1>register</h1>
+            <el-form-item prop="username">
+              <el-input v-model="registerUser.username" class="login-input"
+                        placeholder="用户名"></el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input v-model="registerUser.password" class="login-input" show-password
+                        placeholder="密码"></el-input>
+            </el-form-item>
+            <el-form-item prop="surePassword">
+              <el-input v-model="registerUser.surePassword" class="login-input" show-password
+                        placeholder="确认密码"></el-input>
+            </el-form-item>
+            <el-button @click="register(registerUser)">注册</el-button>
+            <div style="position: absolute;bottom: 30px;color: #fff;font-size: 14px">
+              <p>已有账号？
+                <span style="cursor: pointer;color: #409eff" @click="lor">去登录</span>
+              </p>
+            </div>
+          </div>
+        </el-form>
+        <el-form :rules="loginRules" :ref="loginUser" :model="loginUser">
+          <div class="login-box" v-show="this.loginOrRegister">
+            <h1>login</h1>
+            <el-form-item prop="username">
+              <el-input v-model="loginUser.username" class="login-input" type="userName" placeholder="用户名"></el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input v-model="loginUser.password" class="login-input" show-password type="password"
+                        placeholder="密码"></el-input>
+            </el-form-item>
+            <el-button @click="login(loginUser)">登录</el-button>
+            <div style="position: absolute;bottom: 50px;color: #fff;font-size: 14px">
+              <p>没有账号？
+                <span style="cursor: pointer;color: #409eff" @click="lor">去注册</span>
+              </p>
+            </div>
+          </div>
+        </el-form>
+      </el-card>
+    </div>
   </div>
 </template>
 
 <script>
 import {setRoutes} from "@/router";
+import Storage from "../../public/storage";
+
+let storage = new Storage()
 
 export default {
   name: "Login",
@@ -127,7 +184,7 @@ export default {
       registerRules: {
         username: [
           {required: true, message: '请输入用户名', trigger: 'blur'},
-          {min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur'}
+          {min: 3, max: 16, message: '用户名长度请控制在 3 到 16 个字符', trigger: 'blur'}
         ],
         password: [
           {validator: validatePass, trigger: 'blur'}
@@ -139,7 +196,7 @@ export default {
       loginRules: {
         username: [
           {required: true, message: '请输入用户名', trigger: 'blur'},
-          {min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur'}
+          {min: 3, max: 16, message: '长度在 3 到 16 个字符', trigger: 'blur'}
         ],
         password: [
           {required: true, message: '请输入密码', trigger: 'blur'}
@@ -158,14 +215,14 @@ export default {
         if (valid) {
           this.request.post('user/login', this.loginUser).then(res => {
             if (res.code === '200') {
-              localStorage.setItem('user', JSON.stringify(res.data))   //  存储用户信息到浏览器
-              console.log(res.data)
+              storage.setItem('user', res.data)   //  存储用户信息到浏览器
               localStorage.setItem('menus', JSON.stringify(res.data.menus))  //  储存当前角色的菜单
+              console.log(res.data.menus)
               this.$message.success('登陆成功 ヾ(✿ﾟ▽ﾟ)ノ')
-              this.$router.push(this.$store.state.homePath)
-              if (this.$route.path === '/login') {
-                window.history.back();     //返回上一页并强行刷新
-              }
+              this.$store.state.isLogin = false
+              setTimeout(() => {
+                location.reload()
+              }, 500)
               //  动态设置当前用户的路由
               setRoutes()
             } else {
@@ -202,7 +259,7 @@ export default {
 
 .wrapper {
   height: 100vh;
-  background-image: linear-gradient(to top right, #7F7FD5, #86A8E7, #91EAE4);
+  background-image: linear-gradient(to top right, #7F7FD533, #86A8E7aa, #91EAE4ee);
   background-size: cover;
   width: 100%;
   overflow: hidden;
@@ -245,6 +302,15 @@ body {
   z-index: 2;
   /* 动画过渡 加速后减速 */
   transition: 0.5s ease-in-out;
+}
+
+.box-login-close {
+  color: #fff;
+  cursor: pointer;
+}
+
+.box-login-close:hover {
+  color: #71c9ce;
 }
 
 .register-box, .login-box {

@@ -58,6 +58,9 @@ import {serverIp} from "../../public/config";
 import Notice from "@/views/Notice";
 import News from "@/views/News";
 import Link from "@/views/Link";
+import Storage from "../../public/storage";
+
+let storage = new Storage()
 
 export default {
   name: "index",
@@ -69,7 +72,7 @@ export default {
       labelPosition: 'left',
       carouselList: [],
       form: {},
-      user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
+      user: storage.getItem("user") ? storage.getItem('user') : {},
       dialogImageUrl: '',
       delCarouselId: 0,
       exceed: false,
@@ -108,10 +111,10 @@ export default {
       this.dialogVisible = true;
     },
     async getUser() {
-      return (await this.request.get('user/username/' + this.user.username)).data
+      return (await this.request.get('user/' + this.user.id)).data
     },
     load() {
-      this.request.get('user/username/' + this.user.username).then(res => {
+      this.request.get('user/' + this.user.id).then(res => {
         if (res.code === '200') {
           this.form = res.data;
         }
@@ -131,9 +134,9 @@ export default {
           this.$message.success("保存成功")
           //  更新浏览器的缓存信息
           this.getUser().then(res => {
-            res.token = JSON.parse(localStorage.getItem('user')).token
+            res.token = storage.getItem('user').token
             this.$store.state.user = res
-            localStorage.setItem('user', JSON.stringify(res))
+            storage.setItem('user', res)
           })
           //  返回个人信息
           this.activeName = '1'
@@ -168,8 +171,14 @@ export default {
 }
 
 .box-carousel >>> .el-upload--picture-card {
-  width: 230px;
-  height: 135px;
+  width: 193px;
+  height: 108px;
+  display: flex;
+  justify-content: center;
+}
+
+.box-carousel >>> .el-icon-plus {
+  margin-top: 40px;
 }
 
 .avatar-uploader .el-upload {

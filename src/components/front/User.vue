@@ -1,8 +1,8 @@
 <template>
   <div style="position: absolute;right: 20px;top: 8px">
-    <div v-if="!this.$store.state.user.username" style="padding-right: 30px;"
+    <div v-if="!this.$store.state.user.username"
          class="box-user-information">
-      <el-button class="box-user-login" @click="$router.push('/login')">登录</el-button>
+      <el-button class="box-user-login" @click="$store.state.isLogin = true">登录</el-button>
     </div>
     <div v-else class="box-user-information front-avatar">
       <div :class="{'box-isShow':this.$store.state.windowSize==='xs'}">
@@ -35,6 +35,9 @@
 <script>
 import {resetRoutes} from "@/router";
 import {serverIp} from "../../../public/config";
+import Storage from "../../../public/storage";
+
+let storage = new Storage()
 
 export default {
   name: "User",
@@ -45,11 +48,12 @@ export default {
   },
   methods: {
     toCenter() {
-      let routerGoto = this.$router.resolve('/center/home')
-      window.open(routerGoto.href, '_blank');
+      /*      let routerGoto = this.$router.resolve('/center/home')
+            window.open(routerGoto.href, '_blank');*/
+      this.$router.push('/center/home')
     },
     logout() {
-      localStorage.removeItem('user')
+      storage.removeItem('user')
       localStorage.removeItem('menus')
       //  重置路由
       resetRoutes()

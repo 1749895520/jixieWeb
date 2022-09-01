@@ -2,7 +2,7 @@
   <div>
     <el-card class="box-card box-opacity">
       <div class="box-blog-search">
-        <div style="display: flex">
+        <div v-if="$store.state.windowSize!=='xs'" style="display: flex">
           <el-input
               suffix-icon="el-icon-search"
               class="front-search-input"
@@ -11,29 +11,32 @@
               v-model="$store.state.frontBlogName"></el-input>
           <el-button class="front-search-button" type="primary" @click="load">搜索</el-button>
         </div>
-        <div style="margin-left: 20px">
-          <el-button class="button-reset" type="primary" @click="reset">重置搜索</el-button>
+        <div v-if="$store.state.windowSize!=='xs'" style="margin-left: 20px">
+          <el-button class="button-reset" type="primary" @click="reset">刷新</el-button>
         </div>
         <div style="margin-left: 20px">
           <el-button class="button-publish" type="primary" @click="gotoPublish()">发布</el-button>
         </div>
       </div>
-      <div class="front-blog-main">
+      <div>
         <div class="front-blog-each" v-for="(item,index) in tableData" :key="item.id">
-            <span class="front-blog-eachName" @click="goto(item.id)">{{
-                item.name
-              }}</span>
-          <div class="pd-10 front-blog-eachUser">
+          <span class="front-blog-eachName" @click="goto(item.id)">{{
+              item.name
+            }}
+          </span>
+          <div style="display: flex;justify-content: space-between;margin-top: 20px">
+          <span class="pd-10 front-blog-eachUser">
             <i class="el-icon-my-user mr-1"></i>
             <span>{{ item.user }}</span>
             <i class="el-icon-my-time ml-5 mr-1"></i>
             <span>{{ item.time }}</span>
-          </div>
-          <div class="box-blog-operation"
-               v-if="$store.state.windowOrPhone">
+          </span>
+            <span class="box-blog-operation"
+                  v-if="$store.state.windowOrPhone">
             <el-button type="text" class="box-blog-operation-view" @click="view(item.content)">查看内容</el-button>
-            <el-button type="text" class="box-blog-operation-edit" @click="handleEdit(item)">编辑</el-button>
+            <el-button type="text" class="box-blog-operation-edit" @click="handleEdit(item.id)">编辑</el-button>
             <el-button type="text" class="box-blog-operation-delete" @click="isDel(item.id)">删除</el-button>
+          </span>
           </div>
         </div>
       </div>
@@ -122,6 +125,9 @@
 <script>
 import axios from "axios";
 import {serverIp} from "../../public/config";
+import Storage from "../../public/storage";
+
+let storage = new Storage()
 
 export default {
   name: "PersonBlog",
@@ -133,7 +139,7 @@ export default {
       pageSize: 5,
       content: '',
       user: '',
-      userId: JSON.parse(localStorage.getItem('user')).id,
+      userId: storage.getItem('user').id,
       time: '',
       isfixTab: false,
       delDialogVisible: false,
@@ -208,10 +214,9 @@ export default {
       this.pageNum = pageNum
       this.load()
     },
-    handleEdit(row) {
-      this.form = row
-      this.dialogFormVisible = true
-      this.load()
+    handleEdit(id) {
+      let routerGoto = this.$router.resolve('/center/publish/blog?id=' + id)
+      window.open(routerGoto.href, '_blank');
     },
     isDel(id) {
       this.delId = id
@@ -298,11 +303,10 @@ export default {
 }
 
 .front-blog-eachUser {
-  display: flex;
+  width: auto;
   justify-content: left;
   font-size: 14px;
   position: relative;
-  top: 20px;
   color: gray;
 }
 

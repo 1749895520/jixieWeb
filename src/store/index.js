@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import router, {resetRoutes} from "@/router";
+import {resetRoutes} from "@/router";
+import Storage from "../../public/storage";
+
+let storage = new Storage()
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
@@ -25,6 +28,7 @@ const store = new Vuex.Store({
         clickRing: false,
         scrollY: 0,
         isRing: false,
+        isLogin: false,
         /*  tag路由导航 */
         // 缓存组件页面
         catch_components: [],
@@ -117,10 +121,8 @@ const store = new Vuex.Store({
             state.activePath = val
         },
         logout() {
-            localStorage.removeItem('user')
+            storage.removeItem('user')
             localStorage.removeItem('menus')
-            router.push('/login')
-
             //  重置路由
             resetRoutes()
         },
